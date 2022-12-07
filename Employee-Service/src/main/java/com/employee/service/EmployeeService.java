@@ -1,5 +1,10 @@
 package com.employee.service;
 
-public interface EmployeeService {
+import com.employee.entity.Employee;
 
+public interface EmployeeService {
+	
+	public Employee checkLoginIdAndPassword(int id, String password);
+	
+	public boolean changeBookQuantity(int id, int changeQuantity);
 }
