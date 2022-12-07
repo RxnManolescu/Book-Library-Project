@@ -10,5 +10,7 @@ public class BookResources {
 	
 	@Autowired
 	private BookService bookService;
+	
+	//test the dao layer by using rest API here (as well as service layer)
 
 }
