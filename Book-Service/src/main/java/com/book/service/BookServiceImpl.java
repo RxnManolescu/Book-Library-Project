@@ -8,28 +8,28 @@ import org.springframework.stereotype.Service;
 import com.book.entity.Book;
 import com.book.persistence.BookDao;
 
+import lombok.Setter;
+
 @Service
 public class BookServiceImpl implements BookService {
 	
+	@Setter
 	@Autowired
 	private BookDao bookDao;
 
 	@Override
 	public List<Book> getAllBooks() {
-		// TODO Auto-generated method stub
-		return null;
+		return bookDao.findAll();
 	}
 
 	@Override
 	public Book searchBookById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		return bookDao.searchBookByBookId(id);
 	}
 
 	@Override
-	public boolean updateQuantity(int bookId, int changeInCopies) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean updateCopies(int bookId, int changeInCopies) {
+		return bookDao.updateCopies(bookId, changeInCopies) > 0;
 	}
 
 
