@@ -55,3 +55,6 @@ values(102, 2, "Martin", "Technology", "2022-12-02", "2022-12-09", 0.0),
 (103, 3, "Sarah", "Management", "2022-12-05", "2022-12-12", 00),
 (104, 1, "Bob", "Technology", "2022-11-29", "2022-12-06", 0.0),
 (105, 2, "Martin", "Data analytics", "2022-11-30", "2022-12-07", 0.0);
+
+alter table library
+add column bookId integer AFTER employeeName;
