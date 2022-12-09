@@ -17,7 +17,7 @@
 	<properties>
 		<java.version>17</java.version>
 	</properties>
-	<dependencies>
+	<dependencies> <!-- spring has mockito so you dont need to add it again here as a dependency-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
