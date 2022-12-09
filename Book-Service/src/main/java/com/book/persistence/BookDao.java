@@ -14,6 +14,7 @@ import com.book.entity.Book;
 public interface BookDao extends JpaRepository<Book, Integer> {
 
 	//search book by book id is already included in JpaRepository (by naming convention I believe)
+	Book searchBookByBookId(int id);
 	
 	
 	//get all books- not in here - service layer using .findall()

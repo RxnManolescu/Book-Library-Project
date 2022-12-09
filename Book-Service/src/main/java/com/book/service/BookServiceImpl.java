@@ -8,9 +8,13 @@ import org.springframework.stereotype.Service;
 import com.book.entity.Book;
 import com.book.persistence.BookDao;
 
+import lombok.Setter;
+
 @Service
 public class BookServiceImpl implements BookService {
 	
+	@Setter   //DOUBLE CHECK ABOUT THIS SETTER HERE- THIS IS FOR JDBC BUT CAN IT
+	//STILL BE USED FOR SPRING JPA?
 	@Autowired
 	private BookDao bookDao;
 
@@ -21,7 +25,8 @@ public class BookServiceImpl implements BookService {
 
 	@Override
 	public Book searchBookById(int id) {
-		 return bookDao.findById(id).orElse(null);
+		return bookDao.searchBookByBookId(id);
+		//return bookDao.findById(id).orElse(null);
 	}
 
 	//if book record is updated, will return true 
@@ -29,6 +34,5 @@ public class BookServiceImpl implements BookService {
 	public boolean updateQuantity(int bookId, int changeInCopies) {
 		return (bookDao.updateCopies(bookId, changeInCopies)>0);
 	}
-
 
 }
