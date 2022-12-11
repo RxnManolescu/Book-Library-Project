@@ -26,14 +26,13 @@ public class LibraryServiceImpl implements LibraryService {
 		}
 		
 		Library library = new Library();
-		library.setTransactionId(ThreadLocalRandom.current().nextInt(0, 2000000000));
+//		library.setTransactionId(ThreadLocalRandom.current().nextInt(0, 2000000000));
 		library.setEmployeeId(employee.getEmployeeId());
 		library.setEmployeeName(employee.getEmployeeName());
 		library.setBookId(book.getBookId());
 		library.setBookType(book.getBookType());
 		library.setIssueDate(LocalDate.now());
 		library.setReturnDate(null);
-
 
 		return libraryDao.save(library);
 	}
@@ -48,7 +47,6 @@ public class LibraryServiceImpl implements LibraryService {
 		
 	@Override
 	public List<Library> getLibrariesByEmployeeId(int employeeId) {
-		List<Library> libraries = libraryDao.findByEmployeeId(employeeId);
-		return libraries;
+		return libraryDao.findByEmployeeId(employeeId);
 	}
 }

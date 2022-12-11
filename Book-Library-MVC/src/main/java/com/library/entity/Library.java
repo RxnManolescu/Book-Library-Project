@@ -4,6 +4,8 @@ import java.time.Duration;
 import java.time.LocalDate;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import lombok.AllArgsConstructor;
@@ -17,6 +19,7 @@ import lombok.NoArgsConstructor;
 public class Library {
 
 	@Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private int transactionId;
 	private int employeeId;
 	private String employeeName;
