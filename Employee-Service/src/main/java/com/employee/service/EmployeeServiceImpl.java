@@ -1,5 +1,8 @@
 package com.employee.service;
 
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,17 +14,23 @@ public class EmployeeServiceImpl implements EmployeeService {
 	
 	@Autowired
 	private EmployeeDao employeeDao;
+	
+	//maybe we wont need this
+//	@Override
+//	public List<Employee> getAllEmployees() {
+//		return employeeDao.findAll();
+//	}
 
 	@Override
 	public Employee checkLoginIdAndPassword(int id, String password) {
-		// TODO Auto-generated method stub
-		return null;
+		return employeeDao.findByEmployeeIdAndPassword(id, password);
 	}
 
 	@Override
 	public boolean changeBookQuantity(int id, int changeQuantity) {
-		// TODO Auto-generated method stub
-		return false;
+		if (employeeDao.updateBookQuantity(changeQuantity, id) > 0) return true;
+		else return false;
 	}
+
 
 }
