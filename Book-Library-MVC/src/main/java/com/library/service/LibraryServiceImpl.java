@@ -1,10 +1,15 @@
 package com.library.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.ThreadLocalRandom;
+
+import com.library.entity.Book;
+import com.library.entity.Employee;
 import com.library.entity.Library;
 import com.library.persistence.LibraryDao;
 
@@ -15,20 +20,33 @@ public class LibraryServiceImpl implements LibraryService {
 	private LibraryDao libraryDao;
 
 	@Override
-	public boolean borrowBook(int employeeId, int bookId) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	public Library borrowBook(Employee employee, Book book) {
+		if (book.getNumberOfCopies() <= 0) {
+			return null;
+		}
+		
+		Library library = new Library();
+//		library.setTransactionId(ThreadLocalRandom.current().nextInt(0, 2000000000));
+		library.setEmployeeId(employee.getEmployeeId());
+		library.setEmployeeName(employee.getEmployeeName());
+		library.setBookId(book.getBookId());
+		library.setBookType(book.getBookType());
+		library.setIssueDate(LocalDate.now());
+		library.setReturnDate(null);
 
-	@Override
-	public boolean returnBook(int employeeId, int bookId) {
-		// TODO Auto-generated method stub
-		return false;
+		return libraryDao.save(library);
 	}
-
+	
 	@Override
-	public List<Library> getBooksByEmployeeId(int employeeId) {
-		// TODO Auto-generated method stub
-		return null;
+	public Library returnBook(Library library) {
+		library.setReturnDate(LocalDate.now());
+		
+		return libraryDao.save(library);
+	}
+		
+		
+	@Override
+	public List<Library> getLibrariesByEmployeeId(int employeeId) {
+		return libraryDao.findByEmployeeId(employeeId);
 	}
 }
