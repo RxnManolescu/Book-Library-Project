@@ -28,6 +28,7 @@ public class Library {
 	private LocalDate issueDate;
 	private LocalDate returnDate;
 	
+	//	Can be used directly in HTML: <div tx:text="${library.getLateFee()}">
 	public double getLateFee() {
 		Duration diff = Duration.between(issueDate.atStartOfDay(), returnDate.atStartOfDay());
 		long diffDays = diff.toDays();
@@ -46,4 +47,6 @@ public class Library {
 		}
 		return 0;
 	}
+	
+
 }
