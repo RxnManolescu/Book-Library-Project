@@ -19,6 +19,7 @@ public class Library {
 	private int transactionId;
 	private int employeeId;
 	private String employeeName;
+	private int bookId;
 	private String bookType;
 	private LocalDate issueDate;
 	private LocalDate expectedReturnDate;
