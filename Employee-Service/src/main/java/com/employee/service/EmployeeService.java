@@ -10,5 +10,7 @@ public interface EmployeeService {
 	
 	public boolean changeBookQuantity(int id, int changeQuantity);
 
-//	List<Employee> getAllEmployees();
+	Employee searchById(int id);
+
+	List<Employee> getAllEmployees();
 }

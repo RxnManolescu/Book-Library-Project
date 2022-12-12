@@ -18,4 +18,8 @@ public interface LibraryService {
 	public List<Book> getBookList();
 	
 	public Library borrowBook2(int bookId, int copies, int employeeId, String password);
+
+//	boolean loginCheck(Library library);
+
+	boolean loginCheck(Employee employee);
 }

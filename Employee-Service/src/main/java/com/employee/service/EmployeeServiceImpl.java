@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.employee.entity.Employee;
+import com.employee.entity.EmployeeList;
 import com.employee.persistence.EmployeeDao;
 
 @Service
@@ -15,10 +16,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 	private EmployeeDao employeeDao;
 	
 	//maybe we wont need this
-//	@Override
-//	public List<Employee> getAllEmployees() {
-//		return employeeDao.findAll();
-//	}
+	@Override
+	public List<Employee> getAllEmployees() {
+		return employeeDao.findAll();
+	}
+	
+	@Override
+	public Employee searchById(int id) {
+		return employeeDao.findById(id).orElse(null);
+	}
 
 	@Override
 	public Employee checkLoginIdAndPassword(int id, String password) {

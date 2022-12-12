@@ -86,19 +86,6 @@ public class LibraryServiceImpl implements LibraryService {
 	
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	//--------------------------------------------------------
 	
 	@Override
@@ -131,6 +118,22 @@ public class LibraryServiceImpl implements LibraryService {
 	public List<Library> getLibrariesByEmployeeId(int employeeId) {
 		List<Library> libraries = libraryDao.findByEmployeeId(employeeId);
 		return libraries;
+	}
+	
+	@Override
+	public boolean loginCheck(Employee employee) {
+		try {
+			Employee myEmp = restTemplate.getForObject("http://localhost:8081/checks/" + employee.getEmployeeId() +"/" + employee.getPassword(), Employee.class);
+
+//			Library emp =libraryDao.findByEmployeeIdAndPassword(employee.getEmployeeId(), employee.getPassword());
+			if(myEmp!=null)
+				return true;
+			return false;
+		}
+		catch(Exception ex) {
+			return false;
+		}
+	
 	}
 
 }
