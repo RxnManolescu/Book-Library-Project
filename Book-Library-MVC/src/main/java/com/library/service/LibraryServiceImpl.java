@@ -72,9 +72,10 @@ public class LibraryServiceImpl implements LibraryService {
 		
 		//employeeIdBookIdIssueDate = transaction_Id
 		//issue date - doesn't matter if same book taken out same day as will update the record with the correct number of copies, which is what we want
+		//changing returnDate = null to expectedReturn date as the connection between sql and java doesn't like the null value entry
 		String empId = String.valueOf(employeeId);
 		String bId = String.valueOf(bookId);
-		Library borrowedBook = new Library(empId+bId+issueDate, employeeId, myEmp.getEmployeeName(), bookId, bookToBorrow.getBookType(), issueDate, expectedReturnDate, null, 0, copies);
+		Library borrowedBook = new Library(empId+bId+issueDate, employeeId, myEmp.getEmployeeName(), bookId, bookToBorrow.getBookType(), issueDate, expectedReturnDate, expectedReturnDate, 0, copies);
 		
 		//need to then add this borrowed book to the library database- im doing the save and update way to not deal with the exceptions
 		//we can change later if needed - SAVE = SAVE AND UPDATE so if same transaction Id is being entered then will override i think? yes- 
@@ -82,7 +83,6 @@ public class LibraryServiceImpl implements LibraryService {
 		libraryDao.save(borrowedBook);
 		
 		return borrowedBook;
-	
 	}
 	
 	//first need to get list of books which have been borrowed (from library dao)- display in html page and get user to click which 1 they want to return
@@ -148,20 +148,6 @@ public class LibraryServiceImpl implements LibraryService {
 		return returningBook;
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	//--------------------------------------------------------
 	
 //	@Override
@@ -196,23 +182,23 @@ public class LibraryServiceImpl implements LibraryService {
 //		List<Library> libraries = libraryDao.findByEmployeeId(employeeId);
 //		return libraries;
 //	}
-	@Override
-	public Library borrowBook(Employee employee, Book book) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Library returnBook(Library library) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Library> getLibrariesByEmployeeId(int employeeId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	@Override
+//	public Library borrowBook(Employee employee, Book book) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	@Override
+//	public Library returnBook(Library library) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	@Override
+//	public List<Library> getLibrariesByEmployeeId(int employeeId) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 	
 	
 }

@@ -31,22 +31,22 @@ public class Library {
 	
 	//WE NEED NUMBER OF COPIES BORROWED IN HERE I think - add later 
 	//----------------------------------------
-	public double getLateFee() {
-		Duration diff = Duration.between(issueDate.atStartOfDay(), returnDate.atStartOfDay());
-		long diffDays = diff.toDays();
-		long extraDays = diffDays - 7;
-		
-		if (extraDays <= 0) {
-			return 0;
-		}
-
-		if (bookType.equals("Data Analytics")) {
-			return extraDays * 0.05;
-		} else if (bookType.equals("Technology")) {
-			return extraDays * 0.06;
-		} else if (bookType.equals("Management")) {
-			return extraDays * 0.07;
-		}
-		return 0;
-	}
+	//	public double getLateFee() {
+	//		Duration diff = Duration.between(issueDate.atStartOfDay(), returnDate.atStartOfDay());
+	//		long diffDays = diff.toDays();
+	//		long extraDays = diffDays - 7;
+	//		
+	//		if (extraDays <= 0) {
+	//			return 0;
+	//		}
+	//
+	//		if (bookType.equals("Data Analytics")) {
+	//			return extraDays * 0.05;
+	//		} else if (bookType.equals("Technology")) {
+	//			return extraDays * 0.06;
+	//		} else if (bookType.equals("Management")) {
+	//			return extraDays * 0.07;
+	//		}
+	//		return 0;
+	//	}
 }

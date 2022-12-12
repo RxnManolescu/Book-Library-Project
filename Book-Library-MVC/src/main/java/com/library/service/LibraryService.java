@@ -8,11 +8,11 @@ import com.library.entity.Library;
 
 public interface LibraryService {
 	
-	public Library borrowBook(Employee employee, Book book);
-	
-	public Library returnBook(Library library);
-	
-	public List<Library> getLibrariesByEmployeeId(int employeeId);
+//	public Library borrowBook(Employee employee, Book book);
+//	
+//	public Library returnBook(Library library);
+//	
+//	public List<Library> getLibrariesByEmployeeId(int employeeId);
 	
 	//NAT HERE ---------------------------------------------------
 	public List<Book> getBookList();
