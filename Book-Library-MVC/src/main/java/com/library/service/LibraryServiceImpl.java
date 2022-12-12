@@ -133,7 +133,7 @@ public class LibraryServiceImpl implements LibraryService {
 		//need to save the new record in library - lowered number of copies and if copies = 0 then delete record from the library table  
 		int copiesAvailible = returningBook.getNumberOfCopies();
 		if(copiesAvailible - 1 == 0) {
-			//DELETE THE RECORD IN LIBRARY 
+			libraryDao.deleteRecord(transaction);
 			
 		}else {
 			//save the returned book with the updated number of copies
@@ -141,8 +141,8 @@ public class LibraryServiceImpl implements LibraryService {
 			libraryDao.save(returningBook);
 		}
 		
-		//need to update number of copies (+1) in book service (so -1 in nat impl)
-		String updated = restTemplate.getForObject("http://localhost:8082/books/" +bookId + "/" + -1, String.class);
+		//updating the number of copies (+1) in book service (so -1 in nat impl to return a book back into the book service)
+		restTemplate.getForObject("http://localhost:8082/books/" +bookId + "/" + -1, String.class);
 		
 		
 		return returningBook;
