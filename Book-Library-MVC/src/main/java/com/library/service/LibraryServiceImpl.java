@@ -30,7 +30,7 @@ public class LibraryServiceImpl implements LibraryService {
 	@Override
 	public List<Book> getBookList() {
 		
-		List<Book> wholeBookList = new ArrayList<Book>();
+		ArrayList<Book> wholeBookList = new ArrayList<Book>();
 		
 		//calling book-service and storing books in bookList object
 		BookList bookList = restTemplate.getForObject("http://localhost:8082/books", BookList.class);
@@ -56,7 +56,7 @@ public class LibraryServiceImpl implements LibraryService {
 			return null;
 		
 		//updates number of book copies available and outputs the updated message- CHECK WITH SUJATA 
-		String updated = restTemplate.getForObject("http://localhost:8082/books/bid/" + copies, String.class);
+		String updated = restTemplate.getForObject("http://localhost:8082/books/" + bookId + "/" + copies, String.class);
 		//if copies not updated (i.e. book not borrowed then return null)
 		if(updated != "Number of copies Updated!")
 			return null;
@@ -72,7 +72,10 @@ public class LibraryServiceImpl implements LibraryService {
 		//transaction id makes it complicated- for now just input 1
 		//idea for transaction id- use rest API to access it from sql (resources then in here)- get all the transaction Id's as a collection 
 		// and use lambdas to get the maximum transaction ID, then add 1 to it when inserting a new record into library- when borrowing a book
-		Library borrowedBook = new Library(1,myEmp.getEmployeeId(), myEmp.getEmployeeName(), bookToBorrow.getBookId(), bookToBorrow.getBookType(), issueDate, expectedReturnDate, null, 0.0);
+		//creating transaction id from employee id and book id
+		String transId = Integer.toString(myEmp.getEmployeeId() + bookToBorrow.getBookId()) + issueDate.toString();
+		//removed a null, not sure what its for ----- ?
+		Library borrowedBook = new Library("string", myEmp.getEmployeeId(), myEmp.getEmployeeName(), bookToBorrow.getBookId(), bookToBorrow.getBookType(), issueDate, expectedReturnDate);
 		
 		//need to then add this borrowed book to the library database- im doing the save and update way to not deal with the exceptions
 		//we can change later if needed - SAVE = SAVE AND UPDATE so if same transaction Id is being entered then will override i think? yes- 
@@ -105,12 +108,11 @@ public class LibraryServiceImpl implements LibraryService {
 		}
 		
 		Library library = new Library();
-		library.setTransactionId(ThreadLocalRandom.current().nextInt(0, 2000000000));
+//		library.setTransactionId(ThreadLocalRandom.current().nextInt(0, 2000000000));
 		library.setEmployeeId(employee.getEmployeeId());
 		library.setEmployeeName(employee.getEmployeeName());
 		library.setBookId(book.getBookId());
 		library.setBookType(book.getBookType());
-		library.setIssueDate(LocalDate.now());
 		library.setReturnDate(null);
 
 
