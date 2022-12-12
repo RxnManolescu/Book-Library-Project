@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 public class Library {
 
 	@Id
-	private int transactionId;
+	private String transactionId;
 	private int employeeId;
 	private String employeeName;
 	private int bookId;
@@ -26,7 +26,10 @@ public class Library {
 	//NAT HERE--------------------------------
 	private LocalDate expectedReturnDate;
 	private LocalDate returnDate;
-	private double lateFee;
+	private int lateFee;
+	private int numberOfCopies;
+	
+	//WE NEED NUMBER OF COPIES BORROWED IN HERE I think - add later 
 	//----------------------------------------
 	public double getLateFee() {
 		Duration diff = Duration.between(issueDate.atStartOfDay(), returnDate.atStartOfDay());

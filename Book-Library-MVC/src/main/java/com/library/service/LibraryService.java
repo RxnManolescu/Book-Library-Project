@@ -18,4 +18,13 @@ public interface LibraryService {
 	public List<Book> getBookList();
 	
 	public Library borrowBook2(int bookId, int copies, int employeeId, String password);
+	
+	public List<Library> getBorrowedBooks();
+	
+	public Library returnBook2(int bookId, int copies, int employeeId, String password);
+	
+	//they want us to take the type of book to be returned and issue date of that book 
+	//how many copies of that book to return ? 
+	
+	
 }
