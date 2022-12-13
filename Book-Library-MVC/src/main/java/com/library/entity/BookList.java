@@ -12,5 +12,4 @@ import lombok.NoArgsConstructor;
 public class BookList {
 	
 	List<Book> booksList;
-
 }

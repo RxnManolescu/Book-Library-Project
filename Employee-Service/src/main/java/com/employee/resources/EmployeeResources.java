@@ -1,8 +1,13 @@
 package com.employee.resources;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.employee.entity.Employee;
@@ -16,7 +21,19 @@ public class EmployeeResources {
 	@Autowired
 	private EmployeeService employeeService;
 	
-	//login check
+	//get employee by id
+	@GetMapping(path = "/employees/{eid}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public Employee searchEmployeeByEmployeeId (@PathVariable("eid") int employeeId) {
+		return employeeService.searchById(employeeId);
+	}
+	
+	//this is method get because we are getting the info from the database
+	@GetMapping(path= "/employees", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Employee> getAllEmployees() {
+		return employeeService.getAllEmployees();
+	}
+	
+	//login check - a get method again because we are getting stuff from the 
 	@GetMapping(path = "/checks/{empId}/{password}")
 	public Employee checkLogin(@PathVariable("empId") int id, @PathVariable("password") String password) {
 		Employee returnEmp = employeeService.checkLoginIdAndPassword(id, password);
@@ -24,21 +41,10 @@ public class EmployeeResources {
 	}
 	
 	//update book quantity
-	@GetMapping(path = "/updates/{empId}/{quantity}")
-	public boolean updateBookQuantity(@PathVariable("empId") int id, @PathVariable("quantity") int quantity) {
-		return employeeService.changeBookQuantity(id, quantity);
+	@RequestMapping(path = "/updates/{empId}/{quantity}", method = RequestMethod.PUT, produces = MediaType.TEXT_PLAIN_VALUE)
+	public String updateBookQuantity(@PathVariable("empId") int id, @PathVariable("quantity") int quantity) {
+		if(employeeService.changeBookQuantity(id, quantity))
+			return "Number of books borrowed updated";
+		else return "Something went wrong...";
 	}
-	
-	//NAT HERE: need a resource to get an employee via employee id- 
-	//getting the details of an employee to store in the library object 
-//	@GetMapping(path = "/employees/{empId}")
-//	public Employee getEmployeeResource(@PathVariable("empId")int id) {
-//		return null;
-//	}
-	//no need to do this as can already find employee by id and password- 
-	//just add password to the parameter of borrow book
-	
-	
-	
-	
 }
