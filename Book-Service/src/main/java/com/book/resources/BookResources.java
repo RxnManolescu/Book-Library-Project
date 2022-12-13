@@ -29,7 +29,7 @@ public class BookResources {
 		return bookService.getAllBooks();
 	}
 	
-	@GetMapping(path = "/books/{bId}/{copies}", produces = MediaType.TEXT_PLAIN_VALUE)
+	@RequestMapping(path = "/books/{bId}/{copies}", method = RequestMethod.PUT, produces = MediaType.TEXT_PLAIN_VALUE)
 	public String updateQuantityResource(@PathVariable("bId") int id,@PathVariable("copies") int noOfCopies) {
 		if(bookService.updateQuantity(id, noOfCopies))
 			return "Number of copies Updated!";
@@ -37,6 +37,10 @@ public class BookResources {
 			return "Number of copies not updated!";
 	}
 
+	/**
+	 * POST = consumer side, changing in post and adding to database - adding a record to a database
+	 * PUT = changing / updating an existing record in the database
+	 */
 	
 	
 	
