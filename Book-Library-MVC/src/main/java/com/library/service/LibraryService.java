@@ -13,4 +13,9 @@ public interface LibraryService {
 	public Library returnBook(Library library);
 	
 	public List<Library> getLibrariesByEmployeeId(int employeeId);
+	
+	//NAT HERE ---------------------------------------------------
+	public List<Book> getBookList();
+	
+	public Library borrowBook2(int bookId, int copies, int employeeId, String password);
 }

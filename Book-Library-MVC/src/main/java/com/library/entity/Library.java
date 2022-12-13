@@ -4,8 +4,6 @@ import java.time.Duration;
 import java.time.LocalDate;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import lombok.AllArgsConstructor;
@@ -19,16 +17,17 @@ import lombok.NoArgsConstructor;
 public class Library {
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private int transactionId;
 	private int employeeId;
 	private String employeeName;
 	private int bookId;
 	private String bookType;
 	private LocalDate issueDate;
+	//NAT HERE--------------------------------
+	private LocalDate expectedReturnDate;
 	private LocalDate returnDate;
-	
-	//	Can be used directly in HTML: <div tx:text="${library.getLateFee()}">
+	private double lateFee;
+	//----------------------------------------
 	public double getLateFee() {
 		Duration diff = Duration.between(issueDate.atStartOfDay(), returnDate.atStartOfDay());
 		long diffDays = diff.toDays();
@@ -47,6 +46,4 @@ public class Library {
 		}
 		return 0;
 	}
-	
-
 }
