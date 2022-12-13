@@ -1,11 +1,20 @@
 package com.library.service;
 
+//import java.net.http.HttpHeaders;
+import org.springframework.http.HttpHeaders;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -34,10 +43,12 @@ public class LibraryServiceImpl implements LibraryService {
 		List<Book> wholeBookList = new ArrayList<Book>();
 		
 		//calling book-service and storing books in bookList object
-		BookList bookList = restTemplate.getForObject("http://localhost:8082/books", BookList.class);
+		//BookList bookList = restTemplate.getForObject("http://localhost:8082/books", BookList.class);
+		Book[] bookList = restTemplate.getForObject("http://localhost:8082/books", Book[].class);
+		
 		
 		//need to use getter to get the list of books from object BookList
-		for(Book book:bookList.getBooksList()) {
+		for(Book book:bookList) {
 			wholeBookList.add(book);
 		}
 		
@@ -97,17 +108,19 @@ public class LibraryServiceImpl implements LibraryService {
 	//negative number of copies inputted here (whatever the number want to return - do the negative of that)
 	//NEED TO ADD NUMBER OF COPIES IN LIBRARY - CHECK FOR IF THE COPIES IS 0 THEN DELETE THAT ENTRY INSIDE OF LIBRARY 
 	@Override
-	public Library returnBook2(int bookId, int copies, int employeeId, String password) {
+	public Library returnBook2(String transactionId, int copies) {
 		//for now, say copies = 1
 		
 		//transaction_id of book to return in library 
-		String empId = String.valueOf(employeeId);
-		String bId = String.valueOf(bookId);
+//		String empId = String.valueOf(employeeId);
+//		String bId = String.valueOf(bookId);
 		LocalDate todaysDate = LocalDate.now();
-		String transaction = empId+bId+todaysDate;
+//		String transaction = empId+bId+todaysDate;
 		
 		//finding the book to return via transaction ID
-		Library returningBook = libraryDao.findByTransactionId(transaction);
+		Library returningBook = libraryDao.findByTransactionId(transactionId);
+		//Library returningBook = libraryDao.searchByTransactionId(transactionId);
+		//Library returningBook = libraryDao.(transactionId);
 		
 		//setting the return date as today
 		returningBook.setReturnDate(todaysDate);
@@ -133,7 +146,7 @@ public class LibraryServiceImpl implements LibraryService {
 		//need to save the new record in library - lowered number of copies and if copies = 0 then delete record from the library table  
 		int copiesAvailible = returningBook.getNumberOfCopies();
 		if(copiesAvailible - 1 == 0) {
-			libraryDao.deleteRecord(transaction);
+			libraryDao.deleteRecord(transactionId);
 			
 		}else {
 			//save the returned book with the updated number of copies
@@ -142,10 +155,40 @@ public class LibraryServiceImpl implements LibraryService {
 		}
 		
 		//updating the number of copies (+1) in book service (so -1 in nat impl to return a book back into the book service)
-		restTemplate.getForObject("http://localhost:8082/books/" +bookId + "/" + -1, String.class);
+		//restTemplate.getForObject("http://localhost:8082/books/" +returningBook.getBookId() + "/" + -1, String.class);
+		//HttpEntity<Employee> httpEntity = new HttpEntity<Employee>(objEmp, headers);
+		//HttpEntity<String> httpEntity = new HttpEntity<String>(returns, headers);
+		HttpHeaders headers = new HttpHeaders();
+		//headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+		HttpEntity<String> entity = new HttpEntity<String>(headers);
 		
+		Map<String, Integer> ourMap = new HashMap<>();
+		ourMap.put("id", returningBook.getBookId());
+		ourMap.put("copies", -1);
+
+		//----------------------------
+		// Prepare acceptable media type
+//	    List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
+//	    acceptableMediaTypes.add(MediaType.IMAGE_JPEG);
+//
+//	    // Prepare header
+//	    HttpHeaders headers = new HttpHeaders();
+//	    headers.setAccept(acceptableMediaTypes);
+//	    HttpEntity<String> entity = new HttpEntity<String>(headers);
+	    //---------------------------------------
+		
+		ResponseEntity<String> responseEntity = restTemplate.exchange("http://localhost:8082/books/{id}/{copies}", HttpMethod.PUT, entity, String.class, ourMap); 
+		
+		//ResponseEntity<Employee> responseEntity = restTemplate.exchange(uri, HttpMethod.PUT, httpEntity, Employee.class); 
+		//exchange- this will return response entity but we need to return string  
 		
 		return returningBook;
+	}
+
+	@Override
+	public Library getRecord(String transactionId) {
+		return libraryDao.findByTransactionId(transactionId);
 	}
 
 	//--------------------------------------------------------

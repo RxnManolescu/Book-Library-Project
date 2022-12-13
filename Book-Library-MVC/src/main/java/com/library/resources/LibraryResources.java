@@ -35,4 +35,9 @@ public class LibraryResources {
 	
 	//111, 1, 1, "password1"
 	
+	@RequestMapping(path = "/libraries/{tid}",method = RequestMethod.GET,produces =MediaType.APPLICATION_JSON_VALUE)
+	public Library getBorrowedBookResource(@PathVariable("tid") String tid){
+		return libraryService.getRecord(tid);
+	}
+	
 }

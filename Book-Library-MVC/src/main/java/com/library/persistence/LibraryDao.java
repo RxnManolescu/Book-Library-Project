@@ -19,6 +19,9 @@ public interface LibraryDao extends JpaRepository<Library, Integer>{
 	
 	Library findByTransactionId(String transactionId);
 	
+	Library searchByTransactionId(String transactionId);
+	
+	
 	//JPQL- delete a record from library 
 	@Modifying
 	@Transactional

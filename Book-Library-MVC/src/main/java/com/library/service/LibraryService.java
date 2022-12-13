@@ -21,7 +21,9 @@ public interface LibraryService {
 	
 	public List<Library> getBorrowedBooks();
 	
-	public Library returnBook2(int bookId, int copies, int employeeId, String password);
+	public Library returnBook2(String transactionId, int copies);
+	
+	public Library getRecord(String transactionId);
 	
 	//they want us to take the type of book to be returned and issue date of that book 
 	//how many copies of that book to return ? 
