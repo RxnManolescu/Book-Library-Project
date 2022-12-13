@@ -68,9 +68,25 @@ public class LibraryServiceImpl implements LibraryService {
 			return null;
 		
 		//updates number of book copies available and outputs the updated message
-		String updated = restTemplate.getForObject("http://localhost:8082/books/" +bookId + "/" + copies, String.class);
+		//String updated = restTemplate.getForObject("http://localhost:8082/books/" +bookId + "/" + copies, String.class);
+		HttpHeaders headers = new HttpHeaders();
+		//headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+		headers.set("Accept", MediaType.TEXT_PLAIN_VALUE);
+		HttpEntity<String> entity = new HttpEntity<String>(headers);
+		
+		Map<String, Integer> ourMap = new HashMap<>();
+		ourMap.put("id", bookId);
+		ourMap.put("copies", copies);
+		
+		ResponseEntity<String> updated = restTemplate.exchange("http://localhost:8082/books/{id}/{copies}", HttpMethod.PUT, entity, String.class, ourMap); 
+		
+		String updatedd = updated.toString();
+		
 		//if copies not updated (i.e. book not borrowed then return null)
-		if(updated != "Number of copies Updated!")
+		//		if(updated != "Number of copies Updated!")
+		//			return null;
+		
+		if(updatedd.equals("Number of copies not updated!"))
 			return null;
 		
 		//getting the employees info to add to library 
@@ -160,25 +176,14 @@ public class LibraryServiceImpl implements LibraryService {
 		//HttpEntity<String> httpEntity = new HttpEntity<String>(returns, headers);
 		HttpHeaders headers = new HttpHeaders();
 		//headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+		headers.set("Accept", MediaType.TEXT_PLAIN_VALUE);
 		HttpEntity<String> entity = new HttpEntity<String>(headers);
 		
 		Map<String, Integer> ourMap = new HashMap<>();
 		ourMap.put("id", returningBook.getBookId());
 		ourMap.put("copies", -1);
-
-		//----------------------------
-		// Prepare acceptable media type
-//	    List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
-//	    acceptableMediaTypes.add(MediaType.IMAGE_JPEG);
-//
-//	    // Prepare header
-//	    HttpHeaders headers = new HttpHeaders();
-//	    headers.setAccept(acceptableMediaTypes);
-//	    HttpEntity<String> entity = new HttpEntity<String>(headers);
-	    //---------------------------------------
 		
-		ResponseEntity<String> responseEntity = restTemplate.exchange("http://localhost:8082/books/{id}/{copies}", HttpMethod.PUT, entity, String.class, ourMap); 
+		restTemplate.exchange("http://localhost:8082/books/{id}/{copies}", HttpMethod.PUT, entity, String.class, ourMap); 
 		
 		//ResponseEntity<Employee> responseEntity = restTemplate.exchange(uri, HttpMethod.PUT, httpEntity, Employee.class); 
 		//exchange- this will return response entity but we need to return string  

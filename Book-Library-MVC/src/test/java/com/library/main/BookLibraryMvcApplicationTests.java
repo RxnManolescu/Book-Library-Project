@@ -38,11 +38,12 @@ class BookLibraryMvcApplicationTests {
 		//pretending Bob is borrowing book 111
 		//this is what should be returned from borrowBook2
 		//transactionid = employeeIdBookIdIssueDate; say empId = 1, bookId=111, issueDate = 2022-12-01- need to add that to the database 
-		Library borrowedBook = new Library("21112022-12-12", 2, "Martin", 111, "Data Analytics", LocalDate.now(), LocalDate.now().plusDays(7), LocalDate.now(), 0, 1);
+		Library borrowedBook = new Library("21112022-12-13", 2, "Martin", 111, "Data Analytics", LocalDate.now(), LocalDate.now().plusDays(7), LocalDate.now().plusDays(7), 0, 1);
 		
 		assertEquals(borrowedBook, libraryServiceImpl.borrowBook2(111, 1, 2, "password2"));
 	}
 	
+	//put order here so that this is done before the testReturnBook()
 	@Test
 	void testGetBorrowedBooks() {	
 		assertTrue(libraryServiceImpl.getBorrowedBooks().size()>0);
@@ -53,10 +54,11 @@ class BookLibraryMvcApplicationTests {
 		//pretending Bob is borrowing book 111
 		//this is what should be returned from borrowBook2
 		//transactionid = employeeIdBookIdIssueDate; say empId = 1, bookId=111, issueDate = 2022-12-01- need to add that to the database 
-		Library returnBook = new Library("11112022-12-01", 1, "Bob", 111, "Data Analytics", LocalDate.of(2022, 12, 1) , LocalDate.of(2022, 12, 8), LocalDate.of(2022, 12, 24), 0, 5);
+		Library returnBook = new Library("11112022-12-01", 1, "Bob", 111, "Data Analytics", LocalDate.of(2022, 12, 1) , LocalDate.of(2022, 12, 8), LocalDate.of(2022, 12, 13), 25, 1);
 		
 		assertEquals(returnBook, libraryServiceImpl.returnBook2("11112022-12-01", 1));
 	}
+	//check out the number of copies
 	
 	//check if dates need to be the same in borrowedBook2 and the library DB 
 
