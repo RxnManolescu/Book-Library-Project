@@ -1,5 +1,5 @@
-<!DOCTYPE html> <!-- different from ash -->
-<html xmlns:th="https://thymeleaf.org">
+<!-- <!DOCTYPE html> <!-- different from ash -->
+<!--  <html xmlns:th="https://thymeleaf.org">
 <head>
 <meta charset="ISO-8859-1">
 <title>LMS</title>
@@ -11,6 +11,34 @@
     Enter Password : <input type="password" th:field="${employee.password}">
     <input type="submit" value="Login">
 </form>
+<br><br>
+<h2 th:text="${message}" style="color: red"></h2>
+</body>
+<!-- </html> -->
+<!-- CSS ADDED -->
+<!DOCTYPE html>
+<html xmlns:th="https://thymeleaf.org">
+<head>
+<link th:href="@{style.css}" rel="stylesheet" />
+<meta charset="ISO-8859-1">
+<title>LMS</title>
+</head>
+<body>
+<img th:src="@{library.jpg}" alt="British Library" class="banner">
+<h1 class="title">Library Management System</h1>
+	<div class="container">
+		<form class="login-form" action="#" th:action="@{./login}" th:object="${employee}" th:method=post> <!-- changed to post to hide info in url -->
+		<div class="login-form-element">
+			ID
+		    <input type="text" th:field="${employee.employeeId}">
+		</div>
+	  	<div class="login-form-element">
+		  	Password
+		    <input type="password" th:field="${employee.password}">
+	  	</div>
+	    <input type="submit" value="Login">
+		</form>
+	</div>
 <br><br>
 <h2 th:text="${message}" style="color: red"></h2>
 </body>

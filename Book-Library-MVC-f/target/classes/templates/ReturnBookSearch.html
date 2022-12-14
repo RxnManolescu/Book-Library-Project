@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="https://thymeleaf.org">
 <head>
+<link th:href="@{style.css}" rel="stylesheet" />
 <meta charset="ISO-8859-1">
 <title>LMS</title>
 </head>
@@ -8,14 +9,15 @@
 <h1>Library Management System</h1>
 <hr> <!-- Horizontal Row -->
 <h2>Return a book</h2>
+<br>
 <!-- need to change from returnBook to a new requestMapping method -->
 <form action="./searchReturnBook" th:method=get>
 	Type of Book : <input type="text" name="bookType"><br><br>
     Issue Date : <input type="date" name="issueDate">
     <input type="submit" value="Search">
 </form>
-<br><br>
-<table border="1">
+<br>
+<table id="styled-table" border="1">
 	<!-- tr: Table Row -->
 	<tr>
 		<!-- Table Header -->
@@ -35,13 +37,13 @@
 		<td th:text="${library.numberOfCopies}"></td>
 		<td><a th:href="@{'./returningBookButtonFromSearchBorrowedBooks?tId='+${library.transactionId}}" class = "button button1">Return Book</a></td>
 </table>
-<br><br>
+<br>
 <h3 th:text="${message}"></h3>
-<br><br>
+<br>
 <h2 th:text="${message2}"></h2>
 <h2 th:text="${bookDetails}"></h2>
 <h2 th:text="${latefee}" style="color: red"></h2>
-<br><br>
+<br>
 <a href="./index">Back to Menu</a>
 <br>
 <br>

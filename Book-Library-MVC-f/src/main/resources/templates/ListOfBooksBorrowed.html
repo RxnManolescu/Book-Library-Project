@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html xmlns:th="https://thymeleaf.org">
 <head>
+<link th:href="@{style.css}" rel="stylesheet" />
 <meta charset="ISO-8859-1">
 <title>LMS</title>
 </head>
 <body>
+<br>
 <h1>Library Management System</h1>
 <hr>
 <h2>Book successfully borrowed!</h2>
 <br>
 <form action="#" th:action="@{./borrowBooks}" th:object="${library}" th:method=post>
 
-<table border="1">
+<table id="styled-table" border="1">
     <!-- tr: Table Row -->
     <tr>
         <!-- Table Header -->
