@@ -15,7 +15,7 @@ public interface BookDao extends JpaRepository<Book, Integer> {
 	//JPQL
 			@Modifying
 			@Transactional
-			@Query("update Book set numberOfCopies=numberOfCopies+:changeInCopies where bookId=:id") //have to use the class name NOT the table name
+			@Query("update Book set numberOfCopies=numberOfCopies-:changeInCopies where bookId=:id") //have to use the class name NOT the table name
 			int updateCopies(@Param("id") int id,@Param("changeInCopies") int changeInCopies);
 
 			Book searchBookByBookId(int id);

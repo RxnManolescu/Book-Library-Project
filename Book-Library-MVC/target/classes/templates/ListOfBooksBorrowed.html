@@ -6,33 +6,42 @@
 </head>
 <body>
 <h1>Library Management System</h1>
-<hr> <!-- Horizontal Row -->
-<h2>List of Books in Catalogue</h2>
+<hr>
+<form action="#" th:action="@{./borrowBooks}" th:object="${library}" th:method=post>
+
+Enter number of copies <input type="text" name="copies"><br><br> 
+ <input type="submit" value="Submit">
+ 
 <table border="1">
 	<!-- tr: Table Row -->
 	<tr>
 		<!-- Table Header -->
 		<th>Book ID</th>
-		<th>Book Name</th>
 		<th>Book Type</th>
-		<th>Author</th>
-		<th>Description</th>
-		<th>Number of copies</th>
+		<th>Issue Date</th>
+		<th>Expected Return Date</th>
+		<th>Number of Copies</th>
+
 	</tr>
 	<tr th:each="library : ${libraries}">
 	<!-- table data -->
 		<td th:text="${library.bookId}"></td>
-		<td th:text="${library.bookName}"></td>
 		<td th:text="${library.bookType}"></td>
-		<td th:text="${library.bookAuthor}"></td>
-		<td th:text="${library.bookDescription}"></td>
+		<td th:text="${library.issueDate}"></td>
+		<td th:text="${library.expectedReturnDate}"></td>
 		<td th:text="${library.numberOfCopies}"></td>
-		<td> <a href="./ListOfBooksBorrowed"> <button type="button" class="industry-button">Borrow</button></a></td>
+
 		
 		
-	</tr>
+
 </table>
+	<!-- Enter number of copies <input type="text" th:field="${book.numberOfCopies}"><br><br> -->
+	</form> 
 <br><br>
+<h2 th:text="${message}" style="color: red"></h2>
+
+<br><br>
+
 <a href="./index">Back to Menu</a>
 <br>
 <br>
@@ -49,9 +58,5 @@
    </div>
 
 </footer>
-
 </body>
 </html>
-
-
-
