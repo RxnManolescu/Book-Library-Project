@@ -90,15 +90,35 @@ public class LibraryController {
 		return modelAndView;
 	}
 	
-	@RequestMapping("/borrowBooks")
-	public ModelAndView borrowBookController(HttpSession session) {
-		
-		ModelAndView modelAndView=new ModelAndView();
-		
-		Employee employee=(Employee)session.getAttribute("employee");
-		
-		return modelAndView;
-	}
+
+	// =================Borrowed booksController=======================
+
+    @RequestMapping("/ListOfBooksBorrowed")
+    public ModelAndView ListOfBooksBorrowedPageController() {
+        return new ModelAndView("ListOfBooksBorrowed");
+    }
+
+    @RequestMapping("/borrowBooks")
+    public ModelAndView borrowBookController(@RequestParam("copies") int copies, Book book, HttpSession session) {
+
+        ModelAndView modelAndView=new ModelAndView();
+
+        Employee employee=(Employee)session.getAttribute("employee");
+
+
+        Library lib = libraryService.borrowBook2(book.getBookId(), copies, employee);
+
+        if(lib.getNumberOfCopies() > 0) {
+            modelAndView.addObject("libraries", lib);
+            modelAndView.addObject("employeeId", employee.getEmployeeId());
+            modelAndView.setViewName("ListOfBooksBorrowed");
+        } else {
+            modelAndView.addObject("message", "You have exceeded the number of books you can borrow");
+            modelAndView.setViewName("ReturnMessages");
+        }
+
+        return modelAndView;
+    }
 	
 	//NAT HERE ----------------------------------------------------------
 	@RequestMapping("/returnBook")
@@ -127,7 +147,7 @@ public class LibraryController {
 		ModelAndView modelAndView = new ModelAndView();
 		Employee employee = (Employee) session.getAttribute("employee");
 		
-		List<Library> lib = libraryService.getBooksByTypeAndDate(type, issueDate, 0);
+		List<Library> lib = libraryService.getBooksByTypeAndDate(type, issueDate, employee.getEmployeeId());
 		if(lib.size()>0) {
 			modelAndView.addObject("libraries", lib);
 			modelAndView.addObject("employeeId", employee.getEmployeeId());

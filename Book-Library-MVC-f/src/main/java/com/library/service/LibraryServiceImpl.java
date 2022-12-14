@@ -26,9 +26,12 @@ import com.library.entity.Employee;
 import com.library.entity.Library;
 import com.library.persistence.LibraryDao;
 
+import lombok.Setter;
+
 @Service
 public class LibraryServiceImpl implements LibraryService {
 
+	@Setter
 	@Autowired
 	private LibraryDao libraryDao;
 
