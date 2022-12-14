@@ -111,14 +111,14 @@ public class LibraryServiceImpl implements LibraryService {
 		
 		String transactionId = empId+bId+issueDate;
 		
-		//Library bookToBorrow2 = libraryDao.findByTransactionId(transactionId);
+		Library bookToBorrow2 = libraryDao.findByTransactionId(transactionId);
 
 		//need to then add this borrowed book to the library database- im doing the save and update way to not deal with the exceptions
 		//we can change later if needed - SAVE = SAVE AND UPDATE so if same transaction Id is being entered then will override i think? yes- 
 		//if same transaction id then will override that id with new record- this is fine
 			//problem with this is when more than one type of book is borrowed on the same day i.e. borrow book should keep increasing the number of copies in that one row
-		if(libraryDao.findAll().contains(borrowedBook)) {
-			borrowedBook.setNumberOfCopies(borrowedBook.getNumberOfCopies()+1);
+		if(libraryDao.findAll().contains(bookToBorrow2)) {
+			borrowedBook.setNumberOfCopies(bookToBorrow2.getNumberOfCopies()+1);
 		}
 		libraryDao.save(borrowedBook);
 	
