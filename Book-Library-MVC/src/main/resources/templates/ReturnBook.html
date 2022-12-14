@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html xmlns:th="https://thymeleaf.org">
 <head>
-<link th:href="@{style.css}" rel="stylesheet" />
-<meta charset="ISO-8859-1">
+<meta charset="UTF-8">
 <title>LMS</title>
 </head>
 <body>
 <h1>Library Management System</h1>
+<hr> <!-- Horizontal Row -->
+<h2>Return Books Borrowed</h2>
+
 
 <br><br>
-<h2 th:text="${message}" style="color: red"></h2>
-<p>Please Browse our library catalogue for all available books</p>
-<a href="./viewCatalogue">Browse Catalogue</a><br><br>
-
-
+<h2 th:text="${message}"></h2>
+<h2 th:text="${latefee}" style="color: red"></h2>
+<br><br>
 <a href="./index">Back to Menu</a>
 <br>
 <br>
@@ -23,8 +23,12 @@
 <br>
 
 <footer class="footer">
+
+   <div class="footer-bottom">
    <p>Creators: </p>
        &copy; Group 2 Wiley Edge Team
-</footer>>
+   </div>
+
+</footer>
 </body>
 </html>

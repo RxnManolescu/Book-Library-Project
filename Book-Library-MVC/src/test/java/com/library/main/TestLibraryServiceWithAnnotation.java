@@ -5,91 +5,66 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.web.client.RestTemplate;
 
 import com.library.entity.Book;
+import com.library.entity.BookList;
 import com.library.entity.Employee;
 import com.library.entity.Library;
-import com.library.persistence.LibraryDao;
 import com.library.service.LibraryServiceImpl;
 
-
-@RunWith(MockitoJUnitRunner.class)
-class TestLibraryServiceWithAnnotation {
-
-	@InjectMocks
-	private LibraryServiceImpl libraryServiceImpl;
-	@Mock
-	private LibraryDao libraryDao;
-	private AutoCloseable autoCloseable;
+@SpringBootTest
+class BookLibraryMvcApplicationTests {
 	
-	@BeforeEach
-	void setUp() throws Exception {
-		
-		autoCloseable=MockitoAnnotations.openMocks(this);
-		
-		
-	}
-
-	@AfterEach
-	void tearDown() throws Exception {
-	autoCloseable.close();
-	}
-
-	@Test
-	void testBorrowBookOne() {
-		Library library = new Library(0, 1, "J", 1001, "Management", LocalDate.now(), null);
-		when(libraryDao.save(library)).thenReturn(library);
-			
-		assertNotNull(libraryServiceImpl.borrowBook(
-			new Employee(1, "J", "password", 1),
-			new Book(1001, "book name", "Management", "book author", "book description", 10)
-		));
-	}
+	@Autowired
+	LibraryServiceImpl libraryServiceImpl;
+	
 	
 	@Test
-	void testBorrowBookTwo() {
-		Library library = new Library(0, 1, "J", 1001, "Management", LocalDate.now(), null);
-		when(libraryDao.save(library)).thenReturn(library);
-			
-		assertNull(libraryServiceImpl.borrowBook(
-			new Employee(1, "J", "password", 1),
-			new Book(1001, "book name", "Management", "book author", "book description", 0)
-		));	
+	void testGetBookList() {	
+		assertTrue(libraryServiceImpl.getBookList().size()>0);
 	}
+	
 
+	@Test
+	void testBorrowBook2() {
+		//pretending Bob is borrowing book 111
+		//this is what should be returned from borrowBook2
+		//transactionid = employeeIdBookIdIssueDate; say empId = 1, bookId=111, issueDate = 2022-12-01- need to add that to the database 
+		Library borrowedBook = new Library("21112022-12-13", 2, "Martin", 111, "Data Analytics", LocalDate.now(), LocalDate.now().plusDays(7), LocalDate.now().plusDays(7), 0, 1);
+		
+		Employee emp = new Employee(2, "Martin", "password2", 0);
+		
+		assertEquals(borrowedBook, libraryServiceImpl.borrowBook(111, 1, emp));
+	}
+	
+	//put order here so that this is done before the testReturnBook()
+	@Test
+	void testGetBorrowedBooks() {	
+		assertTrue(libraryServiceImpl.getBorrowedBooks().size()>0);
+	}
+	
 	@Test
 	void testReturnBook() {
-		Library beforeReturn = new Library(0, 1, "J", 1001, "Management", LocalDate.now(), null);
-		Library afterReturn = new Library(0, 1, "J", 1001, "Management", LocalDate.now(), LocalDate.now());
+		//pretending Bob is borrowing book 111
+		//this is what should be returned from borrowBook2
+		//transactionid = employeeIdBookIdIssueDate; say empId = 1, bookId=111, issueDate = 2022-12-01- need to add that to the database 
+		Library returnBook = new Library("11112022-12-01", 1, "Bob", 111, "Data Analytics", LocalDate.of(2022, 12, 1) , LocalDate.of(2022, 12, 8), LocalDate.of(2022, 12, 13), 25, 1);
 		
-		when(libraryDao.save(afterReturn)).thenReturn(afterReturn);
-		
-		Library result = libraryServiceImpl.returnBook(beforeReturn);
-		assert(result).equals(afterReturn);
+		assertEquals(returnBook, libraryServiceImpl.returnBook("11112022-12-01", 1));
 	}
-
-
-	@Test
-	void testGetLibrariesByEmployeeId() {
-		List<Library> libraries = new ArrayList<Library>();
-		Library library = new Library(0, 2, "J", 1001, "Management", LocalDate.now(), null);
-		libraries.add(library);
-		when(libraryDao.findByEmployeeId(2)).thenReturn(libraries);	
-		assert(libraryServiceImpl.getLibrariesByEmployeeId(2)).equals(libraries);		
-	}
-
+	//check out the number of copies
+	
+	//check if dates need to be the same in borrowedBook2 and the library DB 
 
 }
