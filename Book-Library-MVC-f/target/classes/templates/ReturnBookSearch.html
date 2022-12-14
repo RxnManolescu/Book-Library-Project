@@ -33,11 +33,30 @@
 		<td th:text="${library.issueDate}"></td>
 		<td th:text="${library.expectedReturnDate}"></td>
 		<td th:text="${library.numberOfCopies}"></td>
-		<td ><button class="button button1">Return Book</button></td>
+		<td><a th:href="@{'./returningBookButtonFromSearchBorrowedBooks?tId='+${library.transactionId}}" class = "button button1">Return Book</a></td>
 </table>
 <br><br>
 <h3 th:text="${message}"></h3>
 <br><br>
-<a href="./index">Go Back to Menu Page</a>
+<h2 th:text="${message2}"></h2>
+<h2 th:text="${bookDetails}"></h2>
+<h2 th:text="${latefee}" style="color: red"></h2>
+<br><br>
+<a href="./index">Back to Menu</a>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<footer class="footer">
+
+   <div class="footer-bottom">
+   <p>Creators: </p>
+       &copy; Group 2 Wiley Edge Team
+   </div>
+
+</footer>
 </body>
 </html>

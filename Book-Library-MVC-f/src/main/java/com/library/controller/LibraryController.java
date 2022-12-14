@@ -39,11 +39,24 @@ public class LibraryController {
 		return new ModelAndView("LoginPage", "employee", new Employee());
 	}
 	
+	//changed by ash
 	@RequestMapping("/login")
 	public ModelAndView loginController(@ModelAttribute("employee") Employee employee, HttpSession session) {
 		ModelAndView modelAndView=new ModelAndView();
 		
-		Employee employeeDetails = libraryService.loginCheck(employee.getEmployeeId(), employee.getPassword());
+		Employee employeeDetails = null;
+		
+//		try {
+			employeeDetails = libraryService.loginCheck(employee.getEmployeeId(), employee.getPassword());
+//		} catch (TypeMismatchException e) { //doesnt reach this, goes straight to /error
+//			modelAndView.addObject("message", "Employee Id cannot contain alphabetical values"); //is this a security risk though
+//			modelAndView.setViewName("error");	
+//			System.out.println("type mismatch caught");
+//		} catch (Exception e) {
+//			modelAndView.addObject("message", "Something went wrong..."); //is this a security risk though
+//			modelAndView.setViewName("error");
+//			System.out.println("general exception caught");
+//		}
 		
 		if(employeeDetails!=null) {
 			modelAndView.addObject("employee", employeeDetails);  
@@ -59,6 +72,7 @@ public class LibraryController {
 		return modelAndView;
 	}
 	
+	//changed by rxn
 	@RequestMapping("/viewCatalogue")
 	public ModelAndView viewCatalogueController() {
 		
@@ -66,10 +80,11 @@ public class LibraryController {
 		List<Book> libList=libraryService.getBookList();
 		
 		modelAndView.addObject("libraries", libList);
-		modelAndView.setViewName("LibraryCatalogue");
+		modelAndView.setViewName("BookCatalogue");
 		return modelAndView;
 	}
 	
+	//changed by ash
 	@RequestMapping("/viewBorrowedBooks")
 	public ModelAndView viewBorrowedBooksController(HttpSession session) {
 		
@@ -82,6 +97,7 @@ public class LibraryController {
 		{
 			modelAndView.addObject("libraries", lib);
 			modelAndView.addObject("employeeId", employee.getEmployeeId());
+			modelAndView.addObject("library", new Library());
 			modelAndView.setViewName("BorrowedBooks");
 		} else {
 			modelAndView.addObject("message", "You have no current Borrowed Books");
@@ -93,35 +109,32 @@ public class LibraryController {
 
 	// =================Borrowed booksController=======================
 
-    @RequestMapping("/ListOfBooksBorrowed")
-    public ModelAndView ListOfBooksBorrowedPageController() {
-        return new ModelAndView("ListOfBooksBorrowed");
-    }
+	  @RequestMapping("/borrowBooks") //rxn changed
+	    public ModelAndView borrowBookController(@RequestParam("bId") int bookId, HttpSession session) {
 
-    @RequestMapping("/borrowBooks")
-    public ModelAndView borrowBookController(@RequestParam("copies") int copies, Book book, HttpSession session) {
+	        ModelAndView modelAndView=new ModelAndView();
 
-        ModelAndView modelAndView=new ModelAndView();
+	        Employee employee=(Employee)session.getAttribute("employee");
+	        
+	       
+//	        modelAndView.addObject("books", );
 
-        Employee employee=(Employee)session.getAttribute("employee");
+	        Library lib = libraryService.borrowBook2(bookId, 1, employee);
 
+	        if(lib != null) {
+	            modelAndView.addObject("libraries", lib);
+	            modelAndView.addObject("employeeId", employee.getEmployeeId());
+	            modelAndView.setViewName("ListOfBooksBorrowed");
+	        } else {
+	            modelAndView.addObject("message2", "Sorry, this book is not available!");
+	            modelAndView.setViewName("ReturnMessages");
+	        }
 
-        Library lib = libraryService.borrowBook2(book.getBookId(), copies, employee);
-
-        if(lib.getNumberOfCopies() > 0) {
-            modelAndView.addObject("libraries", lib);
-            modelAndView.addObject("employeeId", employee.getEmployeeId());
-            modelAndView.setViewName("ListOfBooksBorrowed");
-        } else {
-            modelAndView.addObject("message", "You have exceeded the number of books you can borrow");
-            modelAndView.setViewName("ReturnMessages");
-        }
-
-        return modelAndView;
-    }
+	        return modelAndView;
+	    }
 	
 	//NAT HERE ----------------------------------------------------------
-	@RequestMapping("/returnBook")
+	@RequestMapping("/returnBook")  //not changed
 	public ModelAndView returnBookController(HttpSession session) {
 		
 		ModelAndView modelAndView = new ModelAndView();
@@ -141,7 +154,7 @@ public class LibraryController {
 		return modelAndView;
 	}
 	
-	@RequestMapping("/searchReturnBook")
+	@RequestMapping("/searchReturnBook")   //not changed
 	public ModelAndView searchReturnBookController(@RequestParam("bookType") String type, @RequestParam("issueDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate issueDate , HttpSession session) {
 		
 		ModelAndView modelAndView = new ModelAndView();
@@ -160,13 +173,56 @@ public class LibraryController {
 		return modelAndView;
 	}
 	
+	//ash version
+	@RequestMapping("/returningBookButtonFromBorrowedBooks")
+	public ModelAndView returnBookButtonFromBorrowedBooksController(@RequestParam("tId") String tId, HttpSession session) {
+		ModelAndView modelAndView = new ModelAndView();
+//		System.out.println("transaction id :"+tId);
+		//unable to get library object as it is just an iterator of the libraries object session
+		//Library libraryRet = (Library)session.getAttribute("library"); - not in session so doesnt work
+//		System.out.println(library); // for testing
 
+		//this is null because library passed in is null
+		Library libraryReturning = libraryService.returnBook2(tId, 1);
+		Employee employee=(Employee)session.getAttribute("employee");
+		List<Library> lib =  libraryService.getLibraryByEmployeeId(employee.getEmployeeId());
+//		
+//		//emp namp, book type, issue date, return date, late fee
+		modelAndView.addObject("message2", "Return Successful!");
+		modelAndView.addObject("bookDetails", "Employee name: " + libraryReturning.getEmployeeName() + ", Book Type: " + libraryReturning.getBookType() + ", Issue Date: " + libraryReturning.getIssueDate() + ", Return Date: " + libraryReturning.getReturnDate());
+		modelAndView.addObject("latefee", "Late Fee is " + libraryReturning.getLateFee());
+		modelAndView.addObject("libraries", lib);		
+		modelAndView.setViewName("BorrowedBooks");
+		modelAndView.addObject("employeeId", employee.getEmployeeId());
+
+
+		return modelAndView;
+	}
+	
+	//ash version
+	@RequestMapping("/returningBookButtonFromSearchBorrowedBooks")
+	public ModelAndView returnBookButtonController(@RequestParam("tId") String tId, HttpSession session) {
+		ModelAndView modelAndView = new ModelAndView();
+//		System.out.println("transaction id :"+tId);
+		//unable to get library object as it is just an iterator of the libraries object session
+		//Library libraryRet = (Library)session.getAttribute("library"); - not in session so doesnt work
+//		System.out.println(library); // for testing
+
+		//this is null because library passed in is null
+		Library libraryReturning = libraryService.returnBook2(tId, 1);
+		Employee employee=(Employee)session.getAttribute("employee");
+		List<Library> lib =  libraryService.getLibraryByEmployeeId(employee.getEmployeeId());
+//		
+//		//emp namp, book type, issue date, return date, late fee
+		modelAndView.addObject("message2", "Return Successful!");
+		modelAndView.addObject("bookDetails", "Employee name: " + libraryReturning.getEmployeeName() + ", Book Type: " + libraryReturning.getBookType() + ", Issue Date: " + libraryReturning.getIssueDate() + ", Return Date: " + libraryReturning.getReturnDate());
+		modelAndView.addObject("latefee", "Late Fee is " + libraryReturning.getLateFee());
+		modelAndView.addObject("libraries", lib);		
+		modelAndView.setViewName("ReturnBookSearch");
+		modelAndView.addObject("employeeId", employee.getEmployeeId());
+
+
+		return modelAndView;
+	}
 }
 
-
-	
-
-//@Override
-//public List<Library> getBorrowedBooks() {
-//	return libraryDao.findAll();
-//}

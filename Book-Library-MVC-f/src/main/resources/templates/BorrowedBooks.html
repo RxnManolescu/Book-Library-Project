@@ -8,10 +8,13 @@
 <h1>Library Management System</h1>
 <hr> <!-- Horizontal Row -->
 <h2>List of Books Borrowed</h2>
+
 <table border="1">
+
 	<!-- tr: Table Row -->
 	<tr>
 		<!-- Table Header -->
+		<th>Transaction ID</th>
 		<th>Book ID</th>
 		<th>Book Type</th>
 		<th>Issue Date</th>
@@ -19,20 +22,44 @@
 		<th>Number of Copies</th>
 		<th></th>
 	</tr>
-	<tr th:each="library : ${libraries}">
-	<!-- table data -->
-		<td th:text="${library.bookId}"></td>
-		<td th:text="${library.bookType}"></td>
-		<td th:text="${library.issueDate}"></td>
-		<td th:text="${library.expectedReturnDate}"></td>
-		<td th:text="${library.numberOfCopies}"></td>
-		<td ><button class="button button1">Return Book</button></td>
+	
+	<!--  <form action="./returningBookButton" object="${library}" method=post> -->
+	<tr th:each="library2 : ${libraries}"><!-- add form -->
+	
 		
-		<!-- is the message here? -->
-
+	<!-- table data -->
+		<td th:text="${library2.transactionId}"></td>
+		<td th:text="${library2.bookId}"></td><!-- input box editable false aand set  -->
+		<td th:text="${library2.bookType}"></td>
+		<td th:text="${library2.issueDate}"></td>
+		<td th:text="${library2.expectedReturnDate}"></td>
+		<td th:text="${library2.numberOfCopies}"></td>
+		<td><a th:href="@{'./returningBookButtonFromBorrowedBooks?tId='+${library2.transactionId}}" class = "button button1">Return Book</a></td> <!-- if js not allowed we can add here separated by ; -->
+		<!-- each row is a form and the text fields are uneditable -->
+	
+	</tr>
 </table>
-<br><br>
 
-<a href="./index">Go Back to Menu Page</a>
+<br><br>
+<h2 th:text="${message2}"></h2>
+<h2 th:text="${bookDetails}"></h2>
+<h2 th:text="${latefee}" style="color: red"></h2>
+<br><br>
+<a href="./index">Back to Menu</a>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<footer class="footer">
+
+   <div class="footer-bottom">
+   <p>Creators: </p>
+       &copy; Group 2 Wiley Edge Team
+   </div>
+
+</footer>
 </body>
 </html>
