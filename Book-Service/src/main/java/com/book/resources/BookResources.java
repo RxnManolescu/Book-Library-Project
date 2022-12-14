@@ -31,10 +31,14 @@ public class BookResources {
 	
 	@RequestMapping(path = "/books/{bId}/{copies}",method = RequestMethod.PUT,produces = MediaType.TEXT_PLAIN_VALUE)
 	public String updateQuantityResource(@PathVariable("bId") int id,@PathVariable("copies") int noOfCopies) {
-		if(bookService.updateCopies(id, noOfCopies))
+		if(bookService.updateQuantity(id, noOfCopies))
 			return "Number of copies Updated!";
 		else
 			return "Number of copies not updated!";
 	}
 
+	
+	
+	
+	
 }

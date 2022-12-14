@@ -13,7 +13,8 @@ import lombok.Setter;
 @Service
 public class BookServiceImpl implements BookService {
 	
-	@Setter
+	@Setter   //DOUBLE CHECK ABOUT THIS SETTER HERE- THIS IS FOR JDBC BUT CAN IT
+	//STILL BE USED FOR SPRING JPA?
 	@Autowired
 	private BookDao bookDao;
 
@@ -25,12 +26,13 @@ public class BookServiceImpl implements BookService {
 	@Override
 	public Book searchBookById(int id) {
 		return bookDao.searchBookByBookId(id);
+		//return bookDao.findById(id).orElse(null);
 	}
 
+	//if book record is updated, will return true 
 	@Override
-	public boolean updateCopies(int bookId, int changeInCopies) {
-		return bookDao.updateCopies(bookId, changeInCopies) > 0;
+	public boolean updateQuantity(int bookId, int changeInCopies) {
+		return (bookDao.updateCopies(bookId, changeInCopies)>0);
 	}
-
 
 }

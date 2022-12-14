@@ -12,13 +12,25 @@ import com.book.entity.Book;
 
 @Repository
 public interface BookDao extends JpaRepository<Book, Integer> {
+
+	//search book by book id is already included in JpaRepository (by naming convention I believe)
+	Book searchBookByBookId(int id);
 	
-	//JPQL
-		@Modifying
-		@Transactional
-		@Query("update Book set numberOfCopies=numberOfCopies+:changeInCopies where bookId=:id") //have to use the class name NOT the table name
-		int updateCopies(@Param("id") int id,@Param("changeInCopies") int changeInCopies);
-
-		Book searchBookByBookId(int id);
-
+	
+	//get all books- not in here - service layer using .findall()
+	
+	
+	//updateQuantity using JPQL
+	//change in copies = +ve when want to burrow a book, negative when want to return a book
+	@Modifying
+	@Transactional
+	@Query("update Book set numberOfCopies = numberOfCopies - :numb where bookId = :bookId")
+	int updateCopies(@Param("bookId") int bookId, @Param("numb") int changeInCopies);
+	
+//	just trying it - its for the MVC layer 
+//	@Modifying
+//	@Transactional
+//	@Query("update Book set numberOfCopies = numberOfCopies - :numb, issueDate = :date where bookId = :bookId")
+//	int updateBorrowedBoook(@Param("numb") int bookId, @Param("bookId") int changeInCopies, LocalDate issueDate);
+	
 }
