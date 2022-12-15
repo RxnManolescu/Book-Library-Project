@@ -25,6 +25,10 @@ public class LibraryController {
 	@Autowired
 	private LibraryService libraryService;
 	
+	@RequestMapping("/LogoutPage")
+	public ModelAndView logoutPageController() {
+		return new ModelAndView("LogoutPage");
+	}
 	
 	@RequestMapping("/index")
 	public ModelAndView indexPageController() {
@@ -66,72 +70,35 @@ public class LibraryController {
 		List<Book> libList=libraryService.getBookList();
 		
 		modelAndView.addObject("libraries", libList);
-		modelAndView.setViewName("LibraryCatalogue");
+		modelAndView.setViewName("BookCatalogue");
 		return modelAndView;
 	
 	}
 	
+	// =================View Borrowed Books booksController=======================
 	
-	// =================Books borrowed by Employee Controller=======================
 	@RequestMapping("/viewBorrowedBooks")
 	public ModelAndView viewBorrowedBooksController(HttpSession session) {
-		
+			
 		ModelAndView modelAndView=new ModelAndView();
-		
+			
 		Employee employee=(Employee)session.getAttribute("employee");
 		List<Library> lib =  libraryService.getLibraryByEmployeeId(employee.getEmployeeId());
-		
+			
 		if(lib.size() > 0)
-		{
+			{
 			modelAndView.addObject("libraries", lib);
 			modelAndView.addObject("employeeId", employee.getEmployeeId());
+			modelAndView.addObject("library", new Library());
 			modelAndView.setViewName("BorrowedBooks");
 		} else {
 			modelAndView.addObject("message", "You have no current Borrowed Books");
-			modelAndView.addObject("libraries", lib);
-			modelAndView.setViewName("ReturnMessages");
-		}
+			modelAndView.setViewName("BorrowedBooks");
+			}
 		return modelAndView;
-	}
-	
-	// =================Borrowed booksController=======================
-
-    @RequestMapping("/ListOfBooksBorrowed")
-    public ModelAndView ListOfBooksBorrowedPageController() {
-        return new ModelAndView("ListOfBooksBorrowed");
-    }
-
-    @RequestMapping("/borrowBooks")
-    public ModelAndView borrowBookController(@RequestParam("bId") int btId, @RequestParam("copies") int copies, HttpSession session) {
-
-        ModelAndView modelAndView=new ModelAndView();
-
-        Employee employee=(Employee)session.getAttribute("employee");
-        
-        Book book libraryService.borrowBook(btId, copies, employee);
-
-
-        if(lib.getNumberOfCopies() > 0) {
-            modelAndView.addObject("libraries", lib);
-            modelAndView.addObject("employeeId", employee.getEmployeeId());
-            modelAndView.setViewName("ListOfBooksBorrowed");
-        } else {
-            modelAndView.addObject("message", "You have exceeded the number of books you can borrow");
-            modelAndView.setViewName("ReturnMessages");
-        }
-
-        return modelAndView;
-    }
-
-	
+		}
 
 	// =================Return Search Books booksController=======================
-	
-	@RequestMapping("/ReturnBookSearch")
-	public ModelAndView returnBookPageController() {
-		return new ModelAndView("ReturnBookSearch");
-	}
-	
 	
 	@RequestMapping("/returnBook")
 	public ModelAndView returnBookController(HttpSession session) {
@@ -176,26 +143,85 @@ public class LibraryController {
 	
 	
 
-	// =================Return Search Books booksController=======================
-	
-	@RequestMapping("/returningBookButton")
-	public ModelAndView returnBookButtonController(@RequestParam("tId") String tId, HttpSession session) {
-		ModelAndView modelAndView = new ModelAndView();
-		System.out.println("transaction id :"+tId);
-		//unable to get library object as it is just an iterator of the libraries object session
-		//Library libraryRet = (Library)session.getAttribute("library"); - not in session so doesnt work
-//		System.out.println(library); // for testing
+	// =================Return Books button Controller=======================
+	//ash version
+		@RequestMapping("/returningBookButtonFromBorrowedBooks")
+		public ModelAndView returnBookButtonFromBorrowedBooksController(@RequestParam("tId") String tId, HttpSession session) {
+			ModelAndView modelAndView = new ModelAndView();
+//			System.out.println("transaction id :"+tId);
+			//unable to get library object as it is just an iterator of the libraries object session
+			//Library libraryRet = (Library)session.getAttribute("library"); - not in session so doesnt work
+//			System.out.println(library); // for testing
 
-		//this is null because library passed in is null
-//		Library libraryReturning = libraryService.returnBook2(library.getTransactionId(), 1); 
-//		
-//		//emp namp, book type, issue date, return date, late fee
-//		modelAndView.addObject("message", "Return Successful!\n" + library.getEmployeeName() + " , " + library.getBookType() + " , " + library.getIssueDate() + " , " + library.getReturnDate() + "\n");
-//		modelAndView.addObject("latefee", "Late Fee is " + library.getLateFee());
-		modelAndView.setViewName("BorrowedBooks");
+			//this is null because library passed in is null
+			Library libraryReturning = libraryService.returnBook(tId, 1);
+			Employee employee=(Employee)session.getAttribute("employee");
+			List<Library> lib =  libraryService.getLibraryByEmployeeId(employee.getEmployeeId());
+//			
+//			//emp namp, book type, issue date, return date, late fee
+			modelAndView.addObject("message2", "Return Successful!");
+			modelAndView.addObject("bookDetails", "Employee name: " + libraryReturning.getEmployeeName() + ", Book Type: " + libraryReturning.getBookType() + ", Issue Date: " + libraryReturning.getIssueDate() + ", Return Date: " + libraryReturning.getReturnDate());
+			modelAndView.addObject("latefee", "Late Fee is " + libraryReturning.getLateFee());
+			modelAndView.addObject("libraries", lib);		
+			modelAndView.setViewName("BorrowedBooks");
+			modelAndView.addObject("employeeId", employee.getEmployeeId());
 
-		return modelAndView;
-	}
+
+			return modelAndView;
+		}
+		
+		//ash version
+		@RequestMapping("/returningBookButtonFromSearchBorrowedBooks")
+		public ModelAndView returnBookButtonController(@RequestParam("tId") String tId, HttpSession session) {
+			ModelAndView modelAndView = new ModelAndView();
+//			System.out.println("transaction id :"+tId);
+			//unable to get library object as it is just an iterator of the libraries object session
+			//Library libraryRet = (Library)session.getAttribute("library"); - not in session so doesnt work
+//			System.out.println(library); // for testing
+
+			//this is null because library passed in is null
+			Library libraryReturning = libraryService.returnBook(tId, 1);
+			Employee employee=(Employee)session.getAttribute("employee");
+			List<Library> lib =  libraryService.getLibraryByEmployeeId(employee.getEmployeeId());
+//			
+//			//emp namp, book type, issue date, return date, late fee
+			modelAndView.addObject("message2", "Return Successful!");
+			modelAndView.addObject("bookDetails", "Employee name: " + libraryReturning.getEmployeeName() + ", Book Type: " + libraryReturning.getBookType() + ", Issue Date: " + libraryReturning.getIssueDate() + ", Return Date: " + libraryReturning.getReturnDate());
+			modelAndView.addObject("latefee", "Late Fee is " + libraryReturning.getLateFee());
+			modelAndView.addObject("libraries", lib);		
+			modelAndView.setViewName("ReturnBookSearch");
+			modelAndView.addObject("employeeId", employee.getEmployeeId());
+
+
+			return modelAndView;
+		}
+		
+
+		// =================Borrowed booksController=======================
+
+		  @RequestMapping("/borrowBooks")
+		    public ModelAndView borrowBookController(@RequestParam("bId") int bookId, HttpSession session) {
+
+		        ModelAndView modelAndView=new ModelAndView();
+
+		        Employee employee=(Employee)session.getAttribute("employee");
+		        
+		       
+//		        modelAndView.addObject("books", );
+
+		        Library lib = libraryService.borrowBook(bookId, 1, employee);
+
+		        if(lib != null) {
+		            modelAndView.addObject("libraries", lib);
+		            modelAndView.addObject("employeeId", employee.getEmployeeId());
+		            modelAndView.setViewName("ListOfBooksBorrowed");
+		        } else {
+		            modelAndView.addObject("message2", "Sorry, this book is not available!");
+		            modelAndView.setViewName("ReturnMessages");
+		        }
+
+		        return modelAndView;
+		    }
 }
 	
 
