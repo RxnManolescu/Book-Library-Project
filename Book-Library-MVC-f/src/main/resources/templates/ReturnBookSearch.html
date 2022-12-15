@@ -12,8 +12,8 @@
 <br>
 <!-- need to change from returnBook to a new requestMapping method -->
 <form action="./searchReturnBook" th:method=get>
-	Type of Book : <input type="text" name="bookType"><br><br>
-    Issue Date : <input type="date" name="issueDate">
+	Type of Book : <input type="text" name="bookType" required><br><br>
+    Issue Date : <input type="date" name="issueDate" required>
     <input type="submit" value="Search">
 </form>
 <br>
@@ -26,7 +26,7 @@
 		<th>Issue Date</th>
 		<th>Expected Return Date</th>
 		<th>Number of Copies</th>
-		<th></th>
+		<th>Return</th>
 	</tr>
 	<tr th:each="library : ${libraries}">
 	<!-- table data -->
