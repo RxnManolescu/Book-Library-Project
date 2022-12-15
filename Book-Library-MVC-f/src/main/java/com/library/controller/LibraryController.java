@@ -26,6 +26,10 @@ public class LibraryController {
 	@Autowired
 	private LibraryService libraryService;
 	
+	@RequestMapping("/LogoutPage")
+	public ModelAndView logoutPageController() {
+		return new ModelAndView("LogoutPage");
+	}
 	
 	@RequestMapping("/index")
 	public ModelAndView indexPageController() {
@@ -120,13 +124,16 @@ public class LibraryController {
 //	        modelAndView.addObject("books", );
 
 	        Library lib = libraryService.borrowBook2(bookId, 1, employee);
+	        
 
 	        if(lib != null) {
+	        	employee.setBookQuantity(employee.getBookQuantity()+1);
 	            modelAndView.addObject("libraries", lib);
 	            modelAndView.addObject("employeeId", employee.getEmployeeId());
+	            session.setAttribute("employee", employee);
 	            modelAndView.setViewName("ListOfBooksBorrowed");
 	        } else {
-	            modelAndView.addObject("message2", "Sorry, this book is not available!");
+	            modelAndView.addObject("message2", "Sorry, this book is not available or you reached your borrow limit!");
 	            modelAndView.setViewName("ReturnMessages");
 	        }
 
@@ -186,6 +193,8 @@ public class LibraryController {
 		Library libraryReturning = libraryService.returnBook2(tId, 1);
 		Employee employee=(Employee)session.getAttribute("employee");
 		List<Library> lib =  libraryService.getLibraryByEmployeeId(employee.getEmployeeId());
+		employee.setBookQuantity(employee.getBookQuantity()-1);
+		session.setAttribute("employee", employee);
 //		
 //		//emp namp, book type, issue date, return date, late fee
 		modelAndView.addObject("message2", "Return Successful!");
@@ -212,11 +221,13 @@ public class LibraryController {
 		Library libraryReturning = libraryService.returnBook2(tId, 1);
 		Employee employee=(Employee)session.getAttribute("employee");
 		List<Library> lib =  libraryService.getLibraryByEmployeeId(employee.getEmployeeId());
-//		
+		employee.setBookQuantity(employee.getBookQuantity()-1);
+		session.setAttribute("employee", employee);
+		
 //		//emp namp, book type, issue date, return date, late fee
 		modelAndView.addObject("message2", "Return Successful!");
 		modelAndView.addObject("bookDetails", "Employee name: " + libraryReturning.getEmployeeName() + ", Book Type: " + libraryReturning.getBookType() + ", Issue Date: " + libraryReturning.getIssueDate() + ", Return Date: " + libraryReturning.getReturnDate());
-		modelAndView.addObject("latefee", "Late Fee is " + libraryReturning.getLateFee());
+		modelAndView.addObject("latefee", "Late Fee is " + libraryReturning.getLateFee() + " rupees.");
 		modelAndView.addObject("libraries", lib);		
 		modelAndView.setViewName("ReturnBookSearch");
 		modelAndView.addObject("employeeId", employee.getEmployeeId());
@@ -225,4 +236,3 @@ public class LibraryController {
 		return modelAndView;
 	}
 }
-

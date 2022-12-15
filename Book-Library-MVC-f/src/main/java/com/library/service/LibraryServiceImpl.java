@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -70,6 +71,11 @@ public class LibraryServiceImpl implements LibraryService {
 		if(bookToBorrow.getNumberOfCopies()<copies)
 			return null;
 		
+		//checks if employee has too many books out
+		Employee emp = restTemplate.getForObject("http://localhost:8081/employees/" + employee.getEmployeeId(), Employee.class);
+		if(emp.getBookQuantity()>4) { //sets book limit to 5 becausse the check happens before you add a book
+			return null;
+		}
 		
 		//updates number of book copies available and outputs the updated message
 		//String updated = restTemplate.getForObject("http://localhost:8082/books/" +bookId + "/" + copies, String.class);
@@ -93,9 +99,20 @@ public class LibraryServiceImpl implements LibraryService {
 		if(updatedd.equals("Number of copies not updated!"))
 			return null;
 		
-		//getting the employees info to add to library - already passed in through the parameter 
+		//doing same process above to update books borrowed by employee		
+		Map<String, Integer> ourMap2 = new HashMap<>();
+		ourMap2.put("empId", emp.getEmployeeId());
+		ourMap2.put("quantity", copies);
+		
+		ResponseEntity<String> updated2 = restTemplate.exchange("http://localhost:8081/updates/{empId}/{quantity}", HttpMethod.PUT, entity, String.class, ourMap2);
+		
+		String updatedd2 = updated2.toString();
+		
+		if(updatedd2.equals("Something went wrong..."))
+			return null;
+		
+		//getting the employees info to add to library - removing as its passed in
 		//Employee myEmp = restTemplate.getForObject("http://localhost:8081/checks/" + employee.getEmployeeId() +"/" + employee.getPassword(), Employee.class);
-		Employee myEmp = employee;
 		
 		//todays date (format- YYYY-MM-DD)
 		LocalDate issueDate = LocalDate.now();
@@ -105,23 +122,23 @@ public class LibraryServiceImpl implements LibraryService {
 		//employeeIdBookIdIssueDate = transaction_Id
 		//issue date - doesn't matter if same book taken out same day as will update the record with the correct number of copies, which is what we want
 		//changing returnDate = null to expectedReturn date as the connection between sql and java doesn't like the null value entry
-		String empId = String.valueOf(employee.getEmployeeId());
+		String empId = String.valueOf(emp.getEmployeeId());
 		String bId = String.valueOf(bookId);
-		Library borrowedBook = new Library(empId+bId+issueDate, employee.getEmployeeId(), myEmp.getEmployeeName(), bookId, bookToBorrow.getBookType(), issueDate, expectedReturnDate, expectedReturnDate, 0, copies);
-		
-		String transactionId = empId+bId+issueDate;
-		
-		Library bookToBorrow2 = libraryDao.findByTransactionId(transactionId);
+		Library borrowedBook = new Library(empId+bId+issueDate, emp.getEmployeeId(), emp.getEmployeeName(), bookId, bookToBorrow.getBookType(), issueDate, expectedReturnDate, expectedReturnDate, 0, copies);
+				
+		//Library bookToBorrow2 = libraryDao.findByTransactionId(transactionId);
 
 		//need to then add this borrowed book to the library database- im doing the save and update way to not deal with the exceptions
 		//we can change later if needed - SAVE = SAVE AND UPDATE so if same transaction Id is being entered then will override i think? yes- 
 		//if same transaction id then will override that id with new record- this is fine
 			//problem with this is when more than one type of book is borrowed on the same day i.e. borrow book should keep increasing the number of copies in that one row
-		if(libraryDao.findAll().contains(bookToBorrow2)) {
-			borrowedBook.setNumberOfCopies(bookToBorrow2.getNumberOfCopies()+1);
+		Library existingRow = libraryDao.findByTransactionId(borrowedBook.getTransactionId());
+		if(existingRow!=null) {
+			borrowedBook.setNumberOfCopies(existingRow.getNumberOfCopies()+1);
 		}
 		libraryDao.save(borrowedBook);
 	
+		
 		
 		return borrowedBook;
 	}
@@ -193,12 +210,20 @@ public class LibraryServiceImpl implements LibraryService {
 		headers.set("Accept", MediaType.TEXT_PLAIN_VALUE);
 		HttpEntity<String> entity = new HttpEntity<String>(headers);
 		
+		//these dont need the if check
 		Map<String, Integer> ourMap = new HashMap<>();
 		ourMap.put("id", returningBook.getBookId());
 		ourMap.put("copies", -1);
 		
 		restTemplate.exchange("http://localhost:8082/books/{id}/{copies}", HttpMethod.PUT, entity, String.class, ourMap); 
 		
+		//doing same process above to update books returned by employee		
+		Map<String, Integer> ourMap2 = new HashMap<>();
+		ourMap2.put("empId", returningBook.getEmployeeId());
+		ourMap2.put("quantity", -1);
+		
+		restTemplate.exchange("http://localhost:8081/updates/{empId}/{quantity}", HttpMethod.PUT, entity, String.class, ourMap2); 
+
 		//ResponseEntity<Employee> responseEntity = restTemplate.exchange(uri, HttpMethod.PUT, httpEntity, Employee.class); 
 		//exchange- this will return response entity but we need to return string  
 		
@@ -216,6 +241,21 @@ public class LibraryServiceImpl implements LibraryService {
 		return restTemplate.getForObject("http://localhost:8081/checks/" + id +"/" + password, Employee.class);
 	}
 	
+	//ash - adding another loginCheck
+//	@Override
+//	public HashMap<Employee, String> loginCheck2(int id, String password) {
+//		Employee employee = null;
+//		String message = "";
+//		try {
+//			employee = restTemplate.getForObject("http://localhost:8081/checks/" + id +"/" + password, Employee.class);
+//		} catch (TypeMismatchException e) {
+//			message = "There was a type mismatch error!";
+//		}
+//		HashMap<Employee, String> map = new HashMap<Employee, String>();
+//		map.put(employee, message);
+//		return map;
+//	}
+	
 	//first need to get list of books which have been borrowed (from library dao)- display in html page and get user to click which 1 they want to return
 	//needs to be just the borrowed books 
 	@Override
@@ -223,7 +263,7 @@ public class LibraryServiceImpl implements LibraryService {
 		List<Library> libraries = libraryDao.findByEmployeeId(employeeId);
 		return libraries;
 	}
-
+	
 	//not tested!!!
 	@Override
 	public List<Library> getBooksByTypeAndDate(String type, LocalDate date, int empId) {

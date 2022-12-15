@@ -105,3 +105,18 @@ button:active, a:active, input[type="submit"]:active {
 	width: 100%;
 	height: 2.5rem;
 }
+.menu {
+    display: flex;
+    justify-content: center;
+    margin-left: 8px;
+    margin-right: 8px;
+
+}
+
+.menu a {
+    padding-top: 50px;
+    margin-left: 8px;
+    margin-right: 8px;
+    height: 180px;
+    width: 160px;
+}
