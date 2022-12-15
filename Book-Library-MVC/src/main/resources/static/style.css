@@ -73,3 +73,81 @@ button:active, a:active, input[type="submit"]:active {
     text-align: left;
     gap: 2px;	
 }
+
+.menu {
+	display: flex;
+	justify-content: center;
+	margin-left: 8px;
+	margin-right: 8px;
+
+}
+
+.menu a {
+    padding-top: 50px;
+    margin-left: 8px;
+    margin-right: 8px;
+    height: 180px;
+    width: 160px;
+}
+
+@snowsize: 450px;
+@snowfall: 20s;
+
+h1 {
+  position: absolute;
+  top: 50%;
+  margin-top: -0.5em;
+
+  width: 100%;
+  line-height: 1em;
+  text-align: center;
+  
+  font-size: 42px;
+  font-weight: 300;
+  letter-spacing: -0.025em;
+  color: hsl(210, 20%, 35%);
+  
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", Sans-Serif;
+}
+  
+/* // Animation */
+@-webkit-keyframes snowing {
+  from { background-position-y: 0px, 0px; }
+    to { background-position-y: (@snowsize * 2), @snowsize; }
+}
+
+@-moz-keyframes snowing {
+  from { background-position-y: 0px, 0px; }
+    to { background-position-y: (@snowsize * 2), @snowsize; }
+}
+
+@-ms-keyframes snowing {
+  from { background-position-y: 0px, 0px; }
+    to { background-position-y: (@snowsize * 2), @snowsize; }
+}
+
+@-o-keyframes snowing {
+  from { background-position-y: 0px, 0px; }
+    to { background-position-y: (@snowsize * 2), @snowsize; }
+}
+
+@keyframes snowing {
+  from { background-position-y: 0px, 0px; }
+    to { background-position-y: (@snowsize * 2), @snowsize; }
+}
+/* 
+// Mixins */
+.animation(@settings) {
+-webkit-animation: @settings;
+   -moz-animation: @settings;
+    -ms-animation: @settings;
+     -o-animation: @settings;
+        animation: @settings;
+}
+  
+.background-size(@size) {
+-webkit-background-size: @size;
+/*    -moz-background-size: @size;
+     -o-background-size: @size;
+        background-size: @size; */
+}

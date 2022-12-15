@@ -12,11 +12,11 @@
 		<form class="login-form" action="#" th:action="@{./login}" th:object="${employee}" th:method=post> <!-- changed to post to hide info in url -->
 		<div class="login-form-element">
 			ID
-		    <input type="text" th:field="${employee.employeeId}">
+		    <input type="text" placeholder="Enter employee ID" th:field="${employee.employeeId}">
 		</div>
 	  	<div class="login-form-element">
 		  	Password
-		    <input type="password" th:field="${employee.password}">
+		    <input type="password" placeholder="Enter password" th:field="${employee.password}">
 	  	</div>
 	    <input type="submit" value="Login">
 		</form>
