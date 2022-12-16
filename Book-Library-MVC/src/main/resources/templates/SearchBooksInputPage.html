@@ -12,11 +12,11 @@
 <p>This search function will return any books where the selected keyword appears in the title, author name, type or description.</p>
 <hr>
 <form action="./searchBooksByInput">
-	Enter keyword: <input type="text" name="input" pattern="[a-z]{0,9}" required minlength="2"><br><br>
+	Enter keyword: <input type="text" name="input" placeholder="At least two characters" required minlength="2"><br><br>
 	<input type="submit" value="Search Books">
 </form>
 <br><br>
-<h2 th:text="${message}" style="color: red"></h2>
+<h2 th:text="${message}" style="color: white"></h2>
 <br><br>
 <a href="./index">Back to Menu</a>
 <br>
