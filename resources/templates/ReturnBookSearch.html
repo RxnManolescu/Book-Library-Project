@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="https://thymeleaf.org">
+<head>
+<link th:href="@{style.css}" rel="stylesheet" />
+<meta charset="ISO-8859-1">
+<title>LMS</title>
+</head>
+<body>
+<!-- navigation bar -->
+<header class="topnav">
+<h4 class="logo">books2employee</h4>
+<nav>
+<ul class="nav-links">
+<li><p class="logout"> <a href="./LogoutPage">Logout</a></p></li>
+</ul>
+</nav>
+</header>
+<h3 class="welcome">Return a book</h3>
+<br>
+<br>
+<br>
+<form action="./searchReturnBook" th:method=get>
+	Type of Book <input type="text" name="bookType" placeholder="Enter Book Type ..." style="width:220px;height:30px;"><br><br>
+    Issue Date <input type="date" name="issueDate">
+    <br>
+    <br>
+    <input type="submit" value="Search"  style="width:100px;height:40px; font-size: 14px;">
+    </form>
+<br>
+<br>
+<table id="styled-table">
+	<!-- tr: Table Row -->
+	<tr>
+		<!-- Table Header -->
+		<th>Book ID</th>
+		<th>Book Type</th>
+		<th>Issue Date</th>
+		<th>Expected Return Date</th>
+		<th>Number of Copies</th>
+		<th></th>
+	</tr>
+	<tr th:each="library : ${libraries}">
+	<!-- table data -->
+		<td th:text="${library.bookId}"></td>
+		<td th:text="${library.bookType}"></td>
+		<td th:text="${library.issueDate}"></td>
+		<td th:text="${library.expectedReturnDate}"></td>
+		<td th:text="${library.numberOfCopies}"></td>
+		<td><a th:href="@{'./returningBookButtonFromSearchBorrowedBooks?tId='+${library.transactionId}}" class = "button button1">Return Book</a></td>
+</table>
+<br><br>
+<h3 th:text="${message}"></h3>
+<br>
+<br>
+<h2 th:text="${message2}"></h2>
+<h2 th:text="${bookDetails}"></h2>
+<h2 th:text="${latefee}" style="color: red"></h2>
+
+  <p class="policy"><b>RETURN BOOK POLICY</b></p>
+ <div class="policy-detail">
+    <ul class="fee">
+  <li>Maximum of 5 books per loan</li>
+  <li>Books must be returned within <b>7</b> days from loan date. Late fee apply!</li>
+    <dd>- The late fee is <b>Rs 5</b> per day for a <b>Data Analytics</b> Type book</dd>
+    <dd>- The late fee is <b>Rs 6</b> per day for a <b>Technology</b> Type book</dd>
+    <dd>- The late fee is <b>Rs 7</b> per day for a <b>Management</b> Type book</dd>
+  <li>Happy Reading! <i class="fa-regular fa-face-smile"></i></li>
+</ul>  
+  </div>
+<br>
+<a href="./index">Back to Menu</a>
+
+<br>
+<br>
+<!-- changed footer -->
+<div class = footer>
+   <p class="footer-text">Creators: Ash, Bernice, Boram, Natalia and Roxana </p>
+   <p class="footer-text">Copyright &copy; <script>document.write(new Date().getFullYear());</script>, Group 2 Wiley Edge Team </p>
+</div>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="https://thymeleaf.org">
+<head>
+<link th:href="@{style.css}" rel="stylesheet" />
+<meta charset="UTF-8">
+<title>LMS</title>
+</head>
+<body>
+<!-- navigation bar -->
+<header class="topnav">
+<h4 class="logo">books2employee</h4>
+<nav>
+<ul class="nav-links">
+<li><p class="logout"> <a href="./LogoutPage">Logout</a></p></li>
+</ul>
+</nav>
+</header>
+<p class="welcome">Search for book by <b>Title</b>, <b>Author Name</b>, <b>Type</b> or <b>Description</b></p>
+  <br>
+    <br>
+      <br>
+        <br>
+          
+<form action="./searchBooksByInput">
+	Enter keyword <input type="text" name="input" pattern="[a-z]{0,9}" placeholder="Enter Title, Author name, Book Type....." required minlength="2" style="width:220px;height:30px;"><br>
+	<br>
+	  <br>
+    <br>
+     
+	<input type="submit" value="Search Books" style="width:100px;height:40px; font-size: 14px;">
+</form>
+<br>
+<br>
+  <br>
+    <br>
+      <br>
+        <br>
+          <br>
+<h2 th:text="${message}" style="color: red"></h2>
+<br><br>
+  <br>
+    <br>
+      <br>
+        <br>
+          <br>
+            <br>
+<a href="./index">Back to Menu</a>
+<br>
+<br>
+<!-- changed footer -->
+<div class = footer>
+   <p class="footer-text">Creators: Ash, Bernice, Boram, Natalia and Roxana </p>
+   <p class="footer-text">Copyright &copy; <script>document.write(new Date().getFullYear());</script>, Group 2 Wiley Edge Team </p>
+</div>
+</body>
+</html>

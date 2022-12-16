@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="https://thymeleaf.org">
+<head>
+<link th:href="@{style.css}" rel="stylesheet" />
+<meta charset="ISO-8859-1">
+<title>LMS</title>
+</head>
+<body>
+<!-- navigation bar -->
+<header class="topnav">
+<h4 class="logo">book2employee</h4>
+<nav>
+<ul class="nav-links">
+<li><p class="logout"> <a href="./LogoutPage">Logout</a></p></li>
+</ul>
+</nav>
+</header>
+
+<h3 class="welcome">List of Books Found</h3>
+<table id= "styled-table" border="1">
+	<!-- tr: Table Row -->
+	<tr>
+		<!-- Table Header -->
+		<th>Book ID</th>
+		<th>Book Name</th>
+		<th>Book Type</th>
+		<th>Author</th>
+		<th>Description</th>
+		<th>Number of copies</th>
+	</tr>
+	<tr th:each="book : ${booksFound}">
+	<!-- table data -->
+		<td th:text="${book.bookId}"></td>
+		<td th:text="${book.bookName}"></td>
+		<td th:text="${book.bookType}"></td>
+		<td th:text="${book.bookAuthor}"></td>
+		<td th:text="${book.bookDescription}"></td>
+		<td th:text="${book.numberOfCopies}"></td>
+		<td><a th:href="@{'./borrowBooks?bId='+${book.bookId}}">Borrow Book</a></td>
+		
+		
+	</tr>
+</table>
+<br><br>
+<a href="./searchBooks">Search For Another Book</a>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<a href="./index">Back to Menu</a>
+<br>
+<br>
+<!-- changed footer -->
+<div class = footer>
+   <p class="footer-text">Creators: Ash, Bernice, Boram, Natalia and Roxana </p>
+   <p class="footer-text">Copyright &copy; <script>document.write(new Date().getFullYear());</script>, Group 2 Wiley Edge Team </p>
+</div>
+</body>
+</html>

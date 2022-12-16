@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="https://thymeleaf.org">
+<head>
+<link th:href="@{style.css}" rel="stylesheet" />
+<script src="https://kit.fontawesome.com/11d5deca7d.js" crossorigin="anonymous"></script>
+<meta charset="ISO-8859-1">
+<title>LMS</title>
+</head>
+<body>
+<button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
+<!-- navigation bar -->
+<header class="topnav">
+<h4 class="logo">book2employee</h4>
+<nav>
+<ul class="nav-links">
+<li><p class="logout"> <a href="./LogoutPage">Logout</a></p></li>
+</ul>
+</nav>
+</header>
+  <p class="policy"><b>RETURN BOOK POLICY</b></p>
+ <div class="policy-detail">
+    <ul class="fee">
+  <li>Maximum of 5 books per loan</li>
+  <li>Books must be returned within <b>7</b> days from loan date. Late fee apply!</li>
+    <dd>- The late fee is <b>Rs 5</b> per day for a <b>Data Analytics</b> Type book</dd>
+    <dd>- The late fee is <b>Rs 6</b> per day for a <b>Technology</b> Type book</dd>
+    <dd>- The late fee is <b>Rs 7</b> per day for a <b>Management</b> Type book</dd>
+  <li>Happy Reading! <i class="fa-regular fa-face-smile"></i></li>
+</ul>  
+  </div>
+<h3 class="welcome">List of Books in Catalogue</h3>
+
+<table id = "styled-table">
+	<!-- tr: Table Row -->
+	<tr>
+		<!-- Table Header -->
+		<th>Book ID</th>
+		<th>Book Name</th>
+		<th>Book Type</th>
+		<th>Author</th>
+		<th>Description</th>
+		<th>Number of copies</th>
+		<th>Borrow</th> 
+		
+	</tr>
+	<tr th:each="library : ${libraries}">
+	<!-- table data -->
+		<td th:text="${library.bookId}"></td>
+		<td th:text="${library.bookName}"></td>
+		<td th:text="${library.bookType}"></td>
+		<td th:text="${library.bookAuthor}"></td>
+		<td th:text="${library.bookDescription}"></td>
+		<td th:text="${library.numberOfCopies}"></td>
+		<td><a th:href="@{'./borrowBooks?bId='+${library.bookId}}">Borrow Book</a></td> 
+		
+		
+	</tr>
+</table>
+<br>
+<br>
+<br>
+<a class="index" href="./index">Back to Menu</a>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<script>
+// Get the button
+let mybutton = document.getElementById("myBtn");
+
+// When the user scrolls down 20px from the top of the document, show the button
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    mybutton.style.display = "block";
+  } else {
+    mybutton.style.display = "none";
+  }
+}
+
+// When the user clicks on the button, scroll to the top of the document
+function topFunction() {
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+}
+</script>
+<!-- changed footer -->
+<div class = footer>
+   <p class="footer-text">Creators: Ash, Bernice, Boram, Natalia and Roxana </p>
+   <p class="footer-text">Copyright &copy; <script>document.write(new Date().getFullYear());</script>, Group 2 Wiley Edge Team </p>
+</div>
+</body>
+</html>
+
+
