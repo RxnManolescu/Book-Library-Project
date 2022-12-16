@@ -65,11 +65,11 @@ numberOfCopies int);
 
 insert into library(transactionId, employeeId, employeeName, bookId, bookType, issueDate, expectedReturnDate, returnDate, lateFee, numberOfCopies)
 values("11112022-10-01", 1, "Bob", 111, "Data Analytics", '2022-10-01', '2022-10-08', '2022-10-08', 0, 1), -- extremely late
-("11122022-10-01", 1, "Bob", 112, "Management", '2022-12-15', '2022-12-22', '2022-12-22', 0, 1), -- not late
+("11122022-12-15", 1, "Bob", 112, "Management", '2022-12-15', '2022-12-22', '2022-12-22', 0, 1), -- not late
 ("27772022-12-02", 2, "Martin", 777, "Management", '2022-12-02', '2022-12-09', '2022-12-09', 0, 3), -- medium late
-("27772022-12-02", 2, "Martin", 999, "Management", '2022-12-15', '2022-12-22', '2022-12-22', 0, 1), -- not late
-("38882022-12-14", 3, "Sarah", 888, "Management", '2022-12-07', '2022-12-14', '2022-12-14', 0, 2), -- small late
-("38882022-12-15", 3, "Sarah", 222, "Technology", '2022-12-15', '2022-12-22', '2022-12-21', 0, 3); -- not late
+("29992022-12-15", 2, "Martin", 999, "Management", '2022-12-15', '2022-12-22', '2022-12-22', 0, 1), -- not late
+("38882022-12-07", 3, "Sarah", 888, "Management", '2022-12-07', '2022-12-14', '2022-12-14', 0, 2), -- small late
+("32222022-12-15", 3, "Sarah", 222, "Technology", '2022-12-15', '2022-12-22', '2022-12-21', 0, 3); -- not late
 
 drop table library;
 
